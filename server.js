@@ -1,97 +1,72 @@
 var MongoClient = require('mongodb').MongoClient;
-var mongoURI = ''
-var db_name = ""
-var db_user = "";
-var db_pswd = "";
-var x500 = "";
+var mongoURI = 'mongodb://ds021326.mlab.com:21326/';
+//var mongoURI = 'mongodb://ec2-54-175-174-41.compute-1.amazonaws.com:443/' //the URI that works on the UMN network
+var db_name = "game";
+var db_user = "admin";
+var db_pswd = "admin";
 
-// Connect to MongoDB
+var express = require('express');
+var auth = require('./server/auth');
+
+app = express();
+
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+
 MongoClient.connect(mongoURI + db_name, function(err, db){
   if (err) {
+    console.log("COULDNT CONNECT TO DB");
     throw err;
   }
   else {
-    db.authenticate(db_user, db_pswd, function(err, result){
+    db.authenticate(db_user, db_pswd, function(err, result) {
       if (err) {
+        console.log("COULDNT AUTH DB");
         throw err;
       }
-      else {
-        // Do server stuff here
-
-        // Require necessary libraries
-        var express = require('express'),
-            passport = require('passport'),
-            LocalStrategy = require('passport-local').Strategy,
-            session = require('express-session'),
-            MongoStore = require('connect-mongo')(session);
-
-        var sessionStore = new MongoStore({
-            db: db
+      else { //db good
+        var port = process.env.PORT || 3000;
+        var server = app.listen(port);
+        var io = require('socket.io').listen(server);
+/*-----------------------------------------------------------------------------
+SOCKET ROUTES
+-----------------------------------------------------------------------------*/
+        io.sockets.on('connection', function (socket) {
+          socket.on('move', function(data){
+            console.log(data);
+          });
+          socket.on('eat',function(data){
+            console.log(data);
+          });
         });
 
-        // Initialize Server
-        app = express();
-
-        app.configure(function() {
-          app.use(express.static('public'));
-          app.use(express.cookieParser());
-          app.use(express.bodyParser());
-          app.use(express.session({
-            secret: 'placeholder',
-            resave: false,
-            cookie: {},
-            store: sessionStore
-          }));
-          app.use(passport.initialize());
-          app.use(passport.session());
-          app.use(app.router);
-        });
-
-        passport.serializeUser(function(user, done) {
-          console.log("serializing user" + user);
-          done(null, user);
-        });
-
-        passport.deserializeUser(function(id, done) {
-          console.log("deserializing user from id: " + id);
-          done(err, user);
-        });
-
-        passport.use(new LocalStrategy(
-          function(username, password, done) {
-            // Find user from username and password
-            // use done(error, user, message) verification callback at end
-
-
-            // Example given by passport documentation:
-            // User.findOne({ username: username }, function(err, user) {
-            //   if (err) { return done(err); }
-            //   if (!user) {
-            //     return done(null, false, { message: 'Incorrect username.' });
-            //   }
-            //   if (!user.validPassword(password)) {
-            //     return done(null, false, { message: 'Incorrect password.' });
-            //   }
-            //   return done(null, user);
-            // });
-          }
-        ));
-
-        app.set('view engine', 'ejs');
-
-
-        // Set Server Routes
-
+/*-----------------------------------------------------------------------------
+PAGE ROUTES
+-----------------------------------------------------------------------------*/
         // Index / Home Page
         app.get('/', function(req, res){
           res.render('index', {user: req.user});
         });
 
+        app.get('/endpoints', function(req,res){
+          res.render('endpoints');
+        });
+
+        app.get('/games', function(req,res){});
+        app.post('/games', function(req,res){
+          //new game and render page
+        });
+
+        app.get('/spectate/:gameid',function(req,res){});
+
+        app.get('/scoreboard',function(req,res){});
+
+
         // Login Page
         app.get('/login', function(req, res){
           res.render('login');
         });
-
+/*
         app.post(
           '/login',
           passport.authenticate(
@@ -101,7 +76,7 @@ MongoClient.connect(mongoURI + db_name, function(err, db){
               failureFlash: true }
           )
         );
-
+*/
       }
     });
   }

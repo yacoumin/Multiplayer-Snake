@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>A super basic chat app</h1>
+        </header>
+        <input type="text" id="username"><button id="userSet">Set username</button>
+            <div id="chatEntries">
+                <% messages.forEach(function(msg){ %>
+                    <div class="message"><p> <%= msg.username %>  :  <%= msg.message %> </p></div>
+                <% }) %>
+            </div>
+            <div id="chatControls">
+            <input type="text" id="messageInput">
+            <button id="submit">Send</button>
+        </div>
+    </div>
+</body>
+</html>
