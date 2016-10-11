@@ -1,3 +1,11 @@
+var Direction = {
+  UP: 0,
+  DOWN: 1,
+  LEFT: 2,
+  RIGHT: 3
+};
+
+
 function getUser(){
   return "bla";
 }
@@ -10,9 +18,9 @@ function getLength(){
   return 4;
 }
 
-function move(direction){
-  var data = {"user" : getUser(), "game" : getGame(), "direction" : direction, "length" : getLength()};
-  socket.emit('move',data);
+function changeDirection(direction){
+  var data = {"direction" : direction};
+  socket.emit('change-direction',data);
 }
 
 /*-----------------------------------------------------------------------------
@@ -22,18 +30,18 @@ $(function(){
   var socket = io.connect();
 
   $("#moveup").click(function(){
-    move("up");
+    changeDirection(Direction.UP);
   });
 
   $("#movedown").click(function(){
-    move("down");
+    changeDirection(Direction.DOWN);
   });
 
   $("#moveleft").click(function(){
-    move("left");
+    changeDirection(Direction.LEFT);
   });
 
   $("#moveright").click(function(){
-    move("right");
+    changeDirection(Direction.RIGHT);
   });
 });

@@ -15,9 +15,4 @@ Coord.prototype.getY = function(){
   return this.y;
 }
 
-var Direction = {
-  UP: 0,
-  DOWN: 1,
-  LEFT: 2,
-  RIGHT: 3
-};
+module.exports = Coord;

@@ -1,3 +1,4 @@
+/*
 var exports = module.exports = {};
 
 exports.test = "hello";
@@ -9,6 +10,15 @@ exports.hello = function(){
 exports.bye = function(){
   return test2;
 }
+*/
+
+module.exports = Test();
+
+function Test(){
+  this.test = "bla";
+}
+
+
 
 /*
 // Require necessary libraries

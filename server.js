@@ -5,13 +5,23 @@ var db_name = "game";
 var db_user = "admin";
 var db_pswd = "admin";
 
+var userWaiting;
+var games = [];
+
 var express = require('express');
 var auth = require('./server/auth');
+var bodyParser = require('body-parser');
+//var game = require('./server/game');
 
 app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
 
 MongoClient.connect(mongoURI + db_name, function(err, db){
   if (err) {
@@ -32,11 +42,13 @@ MongoClient.connect(mongoURI + db_name, function(err, db){
 SOCKET ROUTES
 -----------------------------------------------------------------------------*/
         io.sockets.on('connection', function (socket) {
-          socket.on('move', function(data){
-            console.log(data);
-          });
-          socket.on('eat',function(data){
-            console.log(data);
+          socket.on('joinGame', function(data){
+            if(userWaiting){
+              //create new game with userWaiting
+            }
+            else{
+              userWaiting = socket;
+            }
           });
         });
 
@@ -45,38 +57,31 @@ PAGE ROUTES
 -----------------------------------------------------------------------------*/
         // Index / Home Page
         app.get('/', function(req, res){
-          res.render('index', {user: req.user});
+          res.render('index', {});
         });
 
         app.get('/endpoints', function(req,res){
           res.render('endpoints');
         });
 
-        app.get('/games', function(req,res){});
-        app.post('/games', function(req,res){
-          //new game and render page
+        app.get('/games/join', function(req,res){});               // view open games list
+        app.put('/games/join/:gameid', function(req,res){});       // join specific game
+        app.get('/games/spectate', function(req,res){});           // view open games list
+        app.get('/games/spectate/:gameid', function(req,res){});   // spectate specific game
+        app.get('/games/create', function(req,res){                // view creation options
+          console.log("new game");
+          res.render('create_game');
         });
-
-        app.get('/spectate/:gameid',function(req,res){});
-
-        app.get('/scoreboard',function(req,res){});
-
-
-        // Login Page
-        app.get('/login', function(req, res){
-          res.render('login');
+        app.post('/games/create', function(req,res){               // create new game
+          var gameid = req.body.gamename;
+          console.log(gameid);
+          res.redirect('/games/' + gameid);
         });
-/*
-        app.post(
-          '/login',
-          passport.authenticate(
-            'local',
-            { successRedirect: '/',
-              failureRedirect: '/login',
-              failureFlash: true }
-          )
-        );
-*/
+        app.get('/games/:gameid', function(req,res){               // page for game itself
+          res.render('game_page');
+        });
+        app.get('/stats',function(req,res){});                     // view stats
+
       }
     });
   }

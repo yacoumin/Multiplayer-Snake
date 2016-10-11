@@ -1,14 +1,12 @@
+require('./coord');
+require('./direction');
+
 function Snake(player,length, direction) {
     this.player = player;
     this.length = length === undefined ? 4 : length;
     this.direction = direction === undefined ? Direction.UP : direction;
     this.body = [new Coord(0,1), new Coord(0,2),
                 new Coord(0,3), new Coord(0,4)];
-
-    this.player.on('move',function(data){
-      
-    });
-
 }
 
 Snake.prototype.setDirection = function(direction) {
@@ -74,3 +72,5 @@ Snake.prototype.inSnake = function(coord) {
 Snake.prototype.getBody = function() {
     return this.body;
 };
+
+module.exports = Snake;

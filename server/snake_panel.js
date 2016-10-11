@@ -1,3 +1,7 @@
+require('./coord');
+require('./direction');
+require('./snake');
+
 function SnakePanel(player,width,height,growCount,shrinkCount,snakeLength){
   this.player = player;
   this.snake = new Snake(this.player,snakeLength,Direction.UP);
@@ -10,10 +14,23 @@ function SnakePanel(player,width,height,growCount,shrinkCount,snakeLength){
   this.generateGrowPellets();
   this.generateShrinkPellets();
 
-  player.on('move',function(data){
-
+  player.on('change-direction',function(data){
+    var dir = data.direction;
+    this.snake.setDirection(dir);
   });
 }
+
+SnakePanel.prototype.tick = function(){
+  if(this.isValidMove(this.snake.getNextPosition())){
+    this.snake.move();
+  }
+  else{
+    this.player.emit('player-death');
+  }
+}
+
+
+
 SnakePanel.prototype.generatePellet = function() {
   var goodLocation = false;
   var coord;
@@ -48,7 +65,7 @@ SnakePanel.prototype.isValidMove = function(coord){
   if(coord.getY() < 0 || coord.getX() > this.height){
     valid = false;
   }
-  if(snake.isSnake(coord){
+  if(snake.inSnake(coord)){
     valid = false;
   }
   return valid;
@@ -56,3 +73,5 @@ SnakePanel.prototype.isValidMove = function(coord){
 
 SnakePanel.prototype.isValidGame = function(){}
 SnakePanel.prototype.newFrame = function(){}
+
+module.exports = SnakePanel;
