@@ -1,13 +1,25 @@
 {
   "name": "multiplayer-snake",
   "version": "1.0.0",
-  "description": "\"a multiplayer snake web game\"",
-  "main": "index.js",
+  "description": "A snake server which allows creation/spectating/interaction of snake games between clients ",
+  "main": "index.ejs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yacoumin/Multiplayer-Snake.git"
+  },
+  "keywords": [
+    "snake",
+    "game"
+  ],
+  "author": "Mina Yacoup, Mitchell Paull, Justin Nguyen, Thomas Ulrich",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yacoumin/Multiplayer-Snake/issues"
+  },
+  "homepage": "https://github.com/yacoumin/Multiplayer-Snake#readme",
   "dependencies": {
     "ejs": "^2.5.2",
     "express": "^4.14.0",

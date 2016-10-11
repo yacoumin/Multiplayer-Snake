@@ -47,7 +47,6 @@ MongoClient.connect(mongoURI + db_name, function(err, db){
           app.use(app.router);
         });
 
-
         passport.serializeUser(function(user, done) {
           console.log("serializing user" + user);
           done(null, user);
