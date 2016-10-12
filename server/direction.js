@@ -1,4 +1,4 @@
-function Direction() = {
+function Direction() {
   this.UP = 0;
   this.DOWN = 1;
   this.LEFT = 2;

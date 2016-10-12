@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duelling Snakes</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Game List</h1>
+    </header>
+    <div>
+      <ul>
+        <% games.forEach(function(game){ %>
+            <li><a href="/games/spectate/<%= game %>"><%= game %></a></li>
+            <% console.log(game) %>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

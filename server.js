@@ -7,11 +7,12 @@ var db_pswd = "admin";
 
 var userWaiting;
 var games = [];
+var fullGames = [];
 
 var express = require('express');
 var auth = require('./server/auth');
 var bodyParser = require('body-parser');
-//var game = require('./server/game');
+var game = require('./server/game');
 
 app = express();
 
@@ -46,7 +47,11 @@ SOCKET ROUTES
             var room = io.sockets.adapter.rooms[socket.room];
             if(room.length == 2){
               console.log("Game has 2 members");
-              //var game = new Game();
+              var users = io.sockets.clients(socket.room);
+              var toRemove = games.indexOf(socket.room);
+              games.splice(toRemove, 1);
+              fullGames.push(socket.room);  // WHY IS THIS NOT WORKING 
+              //var game = new Game(socket.room,users[0],users[1]);
             }
             else{
               console.log("Game has different amt of members");
@@ -73,9 +78,11 @@ PAGE ROUTES
         });
 
         app.get('/games/join', function(req,res){               // view open games list
-          res.render('game_list', {'games' : games});
+          res.render('game_list', {'games' : games, 'path' : 'join'});
         });
-        app.get('/games/spectate', function(req,res){});           // view open games list
+        app.get('/games/spectate', function(req,res){           // view open games list
+          res.render('spectator_list', {'games' : fullGames, 'path' : 'spectate'});
+        });
         app.get('/games/spectate/:gameid', function(req,res){});   // spectate specific game
         app.get('/games/create', function(req,res){                // view creation options
           console.log("new game");
