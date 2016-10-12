@@ -28,6 +28,16 @@ PROGRAM FLOW
 -----------------------------------------------------------------------------*/
 $(function(){
   var socket = io.connect();
+  var paths = window.location.pathname.split('/');
+  var name = paths[paths.length-1];
+  console.log(name);
+  socket.emit('room', name);
+
+
+  $("#userSet").click(function(){
+    $("#getName").hide();
+    socket.emit('set-name',{"name" : $("#username").val()});
+  });
 
   $("#moveup").click(function(){
     changeDirection(Direction.UP);

@@ -42,13 +42,21 @@ MongoClient.connect(mongoURI + db_name, function(err, db){
 SOCKET ROUTES
 -----------------------------------------------------------------------------*/
         io.sockets.on('connection', function (socket) {
-          socket.on('joinGame', function(data){
-            if(userWaiting){
-              //create new game with userWaiting
+          socket.on('set-name', function(data){
+            var room = io.sockets.adapter.rooms[socket.room];
+            if(room.length == 2){
+              console.log("Game has 2 members");
+              //var game = new Game();
             }
             else{
-              userWaiting = socket;
+              console.log("Game has different amt of members");
             }
+          });
+
+          socket.on('room', function(room){
+            console.log("Joining room: " + room);
+            socket.room = room;
+            socket.join(room);
           });
         });
 
@@ -64,8 +72,9 @@ PAGE ROUTES
           res.render('endpoints');
         });
 
-        app.get('/games/join', function(req,res){});               // view open games list
-        app.put('/games/join/:gameid', function(req,res){});       // join specific game
+        app.get('/games/join', function(req,res){               // view open games list
+          res.render('game_list', {'games' : games});
+        });
         app.get('/games/spectate', function(req,res){});           // view open games list
         app.get('/games/spectate/:gameid', function(req,res){});   // spectate specific game
         app.get('/games/create', function(req,res){                // view creation options
@@ -75,6 +84,7 @@ PAGE ROUTES
         app.post('/games/create', function(req,res){               // create new game
           var gameid = req.body.gamename;
           console.log(gameid);
+          games.push(gameid);
           res.redirect('/games/' + gameid);
         });
         app.get('/games/:gameid', function(req,res){               // page for game itself

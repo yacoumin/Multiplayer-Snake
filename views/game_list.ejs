@@ -9,10 +9,15 @@
 <body>
   <div class="container">
     <header>
-      <h1>Game</h1>
+      <h1>Game List</h1>
     </header>
-    <div id="getName">
-      <input type="text" id="username"><button id="userSet">Set username</button>
+    <div>
+      <ul>
+        <% games.forEach(function(game){ %>
+            <li><a href="/games/<%= game %>"><%= game %></a></li>
+            <% console.log(game) %>
+        <% }) %>
+      </ul>
     </div>
   </div>
 </body>
