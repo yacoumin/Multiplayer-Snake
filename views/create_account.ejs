@@ -1,0 +1,17 @@
+<% include _partials/header %>
+<% include _partials/navigation %>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+
+  <div class="container-fluid">
+    <header>
+      <h1>Login</h1>
+    </header>
+    <form id="create" name="create" action="/create" method="post">
+      <input type="text" id="username" name="username" placeholder="Username" required></input></br>
+      <input type="password" id="password" name="password" placeholder="Password" required></input></br>
+      <input type="password" id="passwordValidate" name="passwordValidate" placeholder="Re-Type Password" required></input></br>
+      <input type="submit" placeholder="Submit"></input></br>
+    </form>
+    <div id="message"></div>
+  </div>
+<% include _partials/footer %>

@@ -5,19 +5,25 @@ var db_name = "game";
 var db_user = "admin";
 var db_pswd = "admin";
 
-var userWaiting;
-var games = [];
-var fullGames = [];
+var usersDB = "users";
 
 var express = require('express');
-var auth = require('./server/auth');
+var session = require('express-session');
 var bodyParser = require('body-parser');
-var game = require('./server/game');
+
+//var auth = require('./server/auth');
+//var game = require('./server/game');
+
 
 app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(session({
+  secret: '1234-5678-9012345',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -40,34 +46,38 @@ MongoClient.connect(mongoURI + db_name, function(err, db){
         var server = app.listen(port);
         var io = require('socket.io').listen(server);
 /*-----------------------------------------------------------------------------
-SOCKET ROUTES
+LOGIN methods
 -----------------------------------------------------------------------------*/
+        var validUser = function(username,password){
+          if(db.find(username)){}
+        }
+
+        var usernameTaken = function(username){
+          var collection = db.collection(usersDB);
+          collection.find({'username' : username}).toArray(function(err,docs){
+            console.log(docs);
+            return docs.length > 0; // if no user found, valid user name to be entered into DB
+          });
+        }
+
+        var auth = function(req, res, next) {
+          if (req.session && req.session.user === "amy" && req.session.admin)
+            return next();
+          else
+            return res.sendStatus(401);
+        };
+/*=============================================================================
+SOCKET ROUTES
+=============================================================================*/
         io.sockets.on('connection', function (socket) {
           socket.on('set-name', function(data){
-            var room = io.sockets.adapter.rooms[socket.room];
-            if(room.length == 2){
-              console.log("Game has 2 members");
-              var users = io.sockets.clients(socket.room);
-              var toRemove = games.indexOf(socket.room);
-              games.splice(toRemove, 1);
-              fullGames.push(socket.room);  // WHY IS THIS NOT WORKING 
-              //var game = new Game(socket.room,users[0],users[1]);
-            }
-            else{
-              console.log("Game has different amt of members");
-            }
-          });
 
-          socket.on('room', function(room){
-            console.log("Joining room: " + room);
-            socket.room = room;
-            socket.join(room);
           });
         });
 
-/*-----------------------------------------------------------------------------
+/*=============================================================================
 PAGE ROUTES
------------------------------------------------------------------------------*/
+=============================================================================*/
         // Index / Home Page
         app.get('/', function(req, res){
           res.render('index', {});
@@ -99,7 +109,79 @@ PAGE ROUTES
         });
         app.get('/stats',function(req,res){});                     // view stats
 
+
+/*-----------------------------------------------------------------------------
+LOGIN/ACCOUNT ROUTES
+Creates a session whenever user posts to /login proper credentials.  Every
+other page route must first pass through the auth method, which checks the
+credentials.
+-----------------------------------------------------------------------------*/
+        app.get('/create',function(req,res){
+          res.render('create_account');
+        });
+
+        app.post('/create',function(req,res){
+          var username = req.body.username;
+          var password = req.body.password;
+          if (!username || !password) {
+            console.log("no username or password");
+            res.render('create_account',{'message' : 'missing information in form'});
+          }
+          else if(usernameTaken(username)){
+            console.log("username taken");
+            res.render('create_account',{'message' : 'username has already been taken'});
+          }
+          else{
+            var collection = db.collection(usersDB);
+            var data = {'username' : username, 'password' : password}
+            //collection.insert(data,function(err, ids){});
+            console.log("Message good");
+            console.log(data);
+            res.render('create_account',{'message' : 'good'});
+          }
+        });
+
+        app.get('/login', function (req, res) {
+          if (!req.query.username || !req.query.password) {
+            res.send('login failed');
+          } else if(req.query.username === "amy" || req.query.password === "amyspassword") {
+            req.session.user = "amy";
+            req.session.admin = true;
+            res.send("login success!");
+          }
+        });
+
+        app.post('/login', function (req, res) {
+          var username = req.body.username;
+          var password = req.body.password;
+
+          if (!username || !password) {
+            res.send('login failed');
+          } else if(validUser(username,password)) {
+            req.session.user = username;
+            req.session.admin = true;
+            res.send("login success!");
+          }
+          else{
+            res.send("Invalid information entered");
+          }
+        });
+
+        app.get('/logout', function (req, res) {
+          req.session.destroy();
+          res.send("logout success!");
+        });
+
+        app.get('/content', auth, function (req, res) {
+            res.send("You can only see this after you've logged in.");
+        });
+
+
+
       }
+
+
+
     });
   }
 });

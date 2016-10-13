@@ -1,23 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Duelling Snakes</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/script.js"></script>
-</head>
-<body>
-  <div class="container">
+<% include _partials/header %>
+<% include _partials/navigation %>
+  <div class="container-fluid">
     <header>
       <h1>Duelling Snakes</h1>
     </header>
-    <ul>
-      <li><a href="/games/create">Create a Game</a></li>
-      <li><a href="/games/join">Find a Game</a></li>
-      <li><a href="/games/spectate">Spectate Games</a></li>
-      <li><a href="/stats">Statistics</a></li>
-      <li><a href="/endpoints">Endpoints (test)</a></li>
-    </ul>
   </div>
-</body>
-</html>
+<% include _partials/footer %>
