@@ -1,0 +1,25 @@
+<% include _partials/header %>
+<% include _partials/navigation %>
+  <div class="container-fluid">
+    <header>
+      <h1>Login to Account</h1>
+    </header>
+    <form id="login" name="login" action="/login" method="post">
+      <input type="text" id="username" name="username" placeholder="Username"></input></br>
+      <input type="password" id="password" name = "password" placeholder="Password"></input></br>
+      <input type="submit"></input></br>
+    </form>
+    <div class="alert alert-warning" id="error">
+      <%= error %>
+    </div>
+    <div class="alert alert-success" id="success">
+      <%= success %>
+    </div>
+  </div>
+  <% if(!error){ %>
+    <script>$("#error").hide()</script>
+  <% } %>
+  <% if(!success){ %>
+    <script>$("#success").hide()</script>
+  <% } %>
+<% include _partials/footer %>

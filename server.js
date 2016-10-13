@@ -46,25 +46,67 @@ MongoClient.connect(mongoURI + db_name, function(err, db){
         var server = app.listen(port);
         var io = require('socket.io').listen(server);
 /*-----------------------------------------------------------------------------
-LOGIN methods
+ACCOUNT methods
 -----------------------------------------------------------------------------*/
         var validUser = function(username,password){
           if(db.find(username)){}
         }
 
-        var usernameTaken = function(username){
+        // callback for when username is tested to create new user
+        var createUser = function(username,password,req,res,usernameMatches){
+          if(usernameMatches.length > 0){
+            console.log("username taken");
+            res.render('create_account',{'error' : 'Username has already been taken', 'success' : ''});
+          }
+          else{
+            var data = {'username' : username, 'password' : password}
+            var collection = db.collection(usersDB);
+            collection.insert(data,function(err, ids){});
+            console.log("Message good, inserting");
+            res.render('create_account',{'error' : '', 'success' : "Account successfully created"});
+          }
+        }
+
+        //callback for when username is tested to login new user
+        var loginUser = function(username,password,req,res,usernameMatches){
+          if(usernameMatches.length > 0){ // something matched username
+            if(password === usernameMatches[0].password){ // passwords match
+              console.log("valid login");
+              req.session.user = username;
+              req.session.admin = true;
+              res.render('login_account',{'error' : '', 'success' : "Successfully logged in"});
+            }
+            else{
+              res.render('login_account',{'error' : "Incorrect Password", 'success' : ''});
+            }
+          }
+          else{
+            res.render('login_account',{'error' : "No records match this username", 'success' : ''});
+          }
+        }
+
+        // tests for username existence in DB
+        var testUsername = function(username,password,req,res,callback){
           var collection = db.collection(usersDB);
-          collection.find({'username' : username}).toArray(function(err,docs){
-            console.log(docs);
-            return docs.length > 0; // if no user found, valid user name to be entered into DB
+          collection.find({'username' : username}).toArray(function(err,matchingNames){
+            callback(username,password,req,res,matchingNames);
           });
         }
 
+        // checks if user is currently in session data and logged in
         var auth = function(req, res, next) {
-          if (req.session && req.session.user === "amy" && req.session.admin)
-            return next();
-          else
-            return res.sendStatus(401);
+          var collection = db.collection(usersDB);
+          if(req.session && req.session.user &&req.session.admin){
+            collection.findOne({'username' : req.session.user},function(err,user){
+              if(err){
+                res.render('login_account',{'error' : "You must login before accessing this page", 'success' : ''});
+              }
+              next();
+            });
+          }
+          else{
+            res.render('login_account',{'error' : "You must login before accessing this page", 'success' : ''});
+          }
         };
 /*=============================================================================
 SOCKET ROUTES
@@ -109,7 +151,10 @@ PAGE ROUTES
         });
         app.get('/stats',function(req,res){});                     // view stats
 
-
+        // example of how to auth somebody before letting them visit page
+        app.get('/games',auth,function(req,res){
+          res.render('game_page');
+        });
 /*-----------------------------------------------------------------------------
 LOGIN/ACCOUNT ROUTES
 Creates a session whenever user posts to /login proper credentials.  Every
@@ -117,7 +162,7 @@ other page route must first pass through the auth method, which checks the
 credentials.
 -----------------------------------------------------------------------------*/
         app.get('/create',function(req,res){
-          res.render('create_account');
+          res.render('create_account',{'error': "", 'success' : ''});
         });
 
         app.post('/create',function(req,res){
@@ -125,45 +170,25 @@ credentials.
           var password = req.body.password;
           if (!username || !password) {
             console.log("no username or password");
-            res.render('create_account',{'message' : 'missing information in form'});
-          }
-          else if(usernameTaken(username)){
-            console.log("username taken");
-            res.render('create_account',{'message' : 'username has already been taken'});
+            res.render('create_account',{'error' : 'Missing information in form', 'success' : ''});
           }
           else{
-            var collection = db.collection(usersDB);
-            var data = {'username' : username, 'password' : password}
-            //collection.insert(data,function(err, ids){});
-            console.log("Message good");
-            console.log(data);
-            res.render('create_account',{'message' : 'good'});
+            testUsername(username,password,req,res,createUser);
           }
         });
 
         app.get('/login', function (req, res) {
-          if (!req.query.username || !req.query.password) {
-            res.send('login failed');
-          } else if(req.query.username === "amy" || req.query.password === "amyspassword") {
-            req.session.user = "amy";
-            req.session.admin = true;
-            res.send("login success!");
-          }
+          res.render('login_account',{'error': "", 'success' : ""});
         });
 
         app.post('/login', function (req, res) {
           var username = req.body.username;
           var password = req.body.password;
-
           if (!username || !password) {
             res.send('login failed');
-          } else if(validUser(username,password)) {
-            req.session.user = username;
-            req.session.admin = true;
-            res.send("login success!");
           }
           else{
-            res.send("Invalid information entered");
+            testUsername(username,password,req,res,loginUser);
           }
         });
 
@@ -178,10 +203,9 @@ credentials.
 
 
 
+
+
       }
-
-
-
     });
   }
 });

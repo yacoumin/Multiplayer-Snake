@@ -4,7 +4,7 @@
 
   <div class="container-fluid">
     <header>
-      <h1>Login</h1>
+      <h1>Create Account</h1>
     </header>
     <form id="create" name="create" action="/create" method="post">
       <input type="text" id="username" name="username" placeholder="Username" required></input></br>
@@ -12,6 +12,17 @@
       <input type="password" id="passwordValidate" name="passwordValidate" placeholder="Re-Type Password" required></input></br>
       <input type="submit" placeholder="Submit"></input></br>
     </form>
-    <div id="message"></div>
+    <div class="alert alert-warning" id="error">
+      <%= error %>
+    </div>
+    <div class="alert alert-success" id="success">
+      <%= success %>
+    </div>
   </div>
+  <% if(!error){ %>
+    <script>$("#error").hide()</script>
+  <% } %>
+  <% if(!success){ %>
+    <script>$("#success").hide()</script>
+  <% } %>
 <% include _partials/footer %>

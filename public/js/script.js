@@ -25,7 +25,7 @@ $(function(){
 
   $("#create").submit(function(e){
     var message = "";
-    $("#message").html("");
+    $("#error").html("");
     var usernameValid = validEntries.test($("#username").val());
     var passwordsMatch = $("#password").val() === $("#passwordValidate").val();
     var passwordValid = validEntries.test($("#password").val());
@@ -40,8 +40,8 @@ $(function(){
     }
     if(!usernameValid || !passwordsMatch || !passwordValid){
       e.preventDefault();
-      $("#message").html("<ul>" + message + "</ul>");
-      $("#message").show();
+      $("#error").html("<ul>" + message + "</ul>");
+      $("#error").show();
     }
     else{
       //e.preventDefault();
