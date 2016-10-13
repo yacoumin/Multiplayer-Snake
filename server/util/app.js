@@ -119,48 +119,35 @@ GAME API ROUTES
 Handle client requests to alter the game state
 -----------------------------------------------------------------------------*/
 
+  function move(game,func){
+    if(game){
+      func();
+      res.sendStatus(200);
+    }
+    else{
+      res.sendStatus(404);
+    }
+  }
+
   app.post('games/:gameid/up', function() {
     var game = gameTracker.getGameById(gameid);
-    if(game){
-      game.up();
-      res.sendStatus(200);
-    }
-    else{
-      res.sendStatus(404);
-    }
+    move(game, game.up);
   })
+
   app.post('games/:gameid/down', function() {
     var game = gameTracker.getGameById(gameid);
-    if(game){
-      game.down();
-      res.sendStatus(200);
-    }
-    else{
-      res.sendStatus(404);
-    }
+    move(game, game.down);
   })
 
   app.post('games/:gameid/left', function(){
     var game = gameTracker.getGameById(gameid);
-    if(game){
-      game.left();
-      res.sendStatus(200);
-    }
-    else{
-      res.sendStatus(404);
-    }
-  })
-  app.post('games/:gameid/right', function(req, res) {
-    var game = gameTracker.getGameById(gameid);
-    if(game){
-      game.right();
-      res.sendStatus(200);
-    }
-    else{
-      res.sendStatus(404);
-    }
+    move(game, game.left);
   })
 
+  app.post('games/:gameid/right', function(req, res) {
+    var game = gameTracker.getGameById(gameid);
+    move(game, game.right);
+  })
 });
 
 module.exports.app = app;
