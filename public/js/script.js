@@ -9,14 +9,19 @@ function addMessage(msg, username) {
   $("#chat-entries").append('<div class="ind-msg"><span><strong>' + username + '</strong> : ' + msg + '</span></div>');
 }
 
+function addMyMessage(msg, username){
+  $("#chat-entries").append('<div class="ind-msg"><span class="my-message"><strong>' + username + '</strong> : ' + msg + '</span></div>');
+
+}
+
 
 function sendMessage(e) {
   if ($('#msg').val() != ""){
     socket.emit('message', {'message' : $('#msg').val(), 'username' : $("#username-hidden").val()});
-    addMessage($('#msg').val(), "Me");
+    addMyMessage($('#msg').val(), "Me");
     $('#msg').val('');
   }
-  e.preventDefault();
+  e.preventDefault(); // make sure to stop the post from redirecting
 }
 
 function createAccount(e){
@@ -50,5 +55,5 @@ MAIN SCRIPT FLOW
 =============================================================================*/
 $(function(){
   $("#create").submit(function(e){createAccount(e);});
-  $("#chatting-form").submit(function(e){sendMessage();});
+  $("#chatting-form").submit(function(e){sendMessage(e);});
 });

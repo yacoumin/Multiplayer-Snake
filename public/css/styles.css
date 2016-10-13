@@ -77,3 +77,10 @@ CHAT
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
+.ind-msg .my-message {
+  color: white;
+  background-color: #cccccc;
+  border: none;
+  border-radius: 3px;
+}

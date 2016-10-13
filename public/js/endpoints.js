@@ -1,3 +1,4 @@
+/*
 var Direction = {
   UP: 0,
   DOWN: 1,
@@ -22,10 +23,11 @@ function changeDirection(direction){
   var data = {"direction" : direction};
   socket.emit('change-direction',data);
 }
-
+*/
 /*-----------------------------------------------------------------------------
 PROGRAM FLOW
 -----------------------------------------------------------------------------*/
+/*
 $(function(){
   var socket = io.connect();
   var paths = window.location.pathname.split('/');
@@ -55,3 +57,4 @@ $(function(){
     changeDirection(Direction.RIGHT);
   });
 });
+*/

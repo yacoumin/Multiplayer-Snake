@@ -126,7 +126,7 @@ PAGE ROUTES
         app.get('/', function(req, res){
           res.render('index', {});
         });
-
+/*
         app.get('/endpoints', function(req,res){
           res.render('endpoints');
         });
@@ -152,6 +152,7 @@ PAGE ROUTES
           res.render('game_page');
         });
         app.get('/stats',function(req,res){});                     // view stats
+*/
 
         // example of how to auth somebody before letting them visit page
         // probably a better way to pass the user data around than this, too tired though to look more
