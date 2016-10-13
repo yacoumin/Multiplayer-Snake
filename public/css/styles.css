@@ -79,8 +79,5 @@ CHAT
 }
 
 .ind-msg .my-message {
-  color: white;
-  background-color: #cccccc;
-  border: none;
-  border-radius: 3px;
+  color: red;
 }
