@@ -1,8 +1,8 @@
-function Direction() {
-  this.UP = 0;
-  this.DOWN = 1;
-  this.LEFT = 2;
-  this.RIGHT = 3;
+var Direction = {
+  UP: 0,
+  DOWN: 1,
+  LEFT: 2,
+  RIGHT: 3
 };
 
 module.exports = Direction;

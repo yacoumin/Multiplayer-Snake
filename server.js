@@ -10,6 +10,7 @@ var usersDB = "users";
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var SnakeGame = require('./server/snake_game');
 
 //var auth = require('./server/auth');
 //var game = require('./server/game');
@@ -157,6 +158,10 @@ PAGE ROUTES
         // example of how to auth somebody before letting them visit page
         // probably a better way to pass the user data around than this, too tired though to look more
         app.get('/games',auth,function(req,res){
+          // Make the game if there are no games playing
+          if (Object.keys(activeGames).length === 0) {
+            createGame(1);
+          }
           res.render('game_page',{'username' : req.session.user});
         });
 /*-----------------------------------------------------------------------------
@@ -205,9 +210,66 @@ credentials.
             res.send("You can only see this after you've logged in.");
         });
 
+/*-----------------------------------------------------------------------------
+GAME METHODS
+Methods for creating, altering, saving, and destroying games,
+-----------------------------------------------------------------------------*/
 
+        var activeGames = {};
 
+        function getGameById(gameId) {
+          return activeGames[gameId];
+        }
 
+        function changeGameDirection(gameId, direction) {
+          var game = getGameById(gameId);
+          game.setDirection(Direction.UP);
+        }
+
+        function startGame(gameId) {
+          var game = getGameById(gameId);
+          game.beginGame();
+        }
+
+        function createGame(gameId) {
+          if (activeGames[gameId] != undefined) {
+            throw "game with game id \"" + gameId + "\" already exists! Can't create";
+          }
+          else {
+            console.log("creating game " + gameId);
+            activeGames[gameId] = new SnakeGame(gameId, 20, 20, 3);
+            console.log(activeGames[gameId]);
+          }
+        }
+
+        function destroyGame(gameId) {
+          if (activeGames[gameId] != undefined) {
+            delete activeGames[gameId];
+          }
+        }
+
+/*-----------------------------------------------------------------------------
+GAME API ROUTES
+Handle client requests to alter the game state
+-----------------------------------------------------------------------------*/
+
+        app.post('games/:gameid/up', function() {
+          changeGameDirection(gameId, Direction.UP);
+          res.send(200);
+        })
+        app.post('games/:gameid/down', function() {
+          var game = getGameById(gameId);
+          changeGameDirection(gameId, Direction.DOWN);
+          res.send(200);
+        })
+        app.post('games/:gameid/left', function(){
+          changeGameDirection(gameId, Direction.LEFT);
+          res.send(200);
+        })
+        app.post('games/:gameid/right', function(req, res) {
+          changeGameDirection(gameId, Direction.RIGHT);
+          res.send(200);
+        })
 
       }
     });

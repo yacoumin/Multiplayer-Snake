@@ -1,32 +1,55 @@
-require('./coord');
-require('./direction');
+var Coord = require('./coord');
+var Direction = require('./direction');
 
-function Snake(player,length, direction) {
-    this.player = player;
+function Snake(length, direction) {
     this.length = length === undefined ? 4 : length;
-    this.direction = direction === undefined ? Direction.UP : direction;
+    if (direction) {
+      this.direction = direction;
+    }
+    else {
+      this.direction = Direction.UP;
+    }
     this.body = [new Coord(0,1), new Coord(0,2),
                 new Coord(0,3), new Coord(0,4)];
+    this.previousTail = undefined;
+}
+
+Snake.prototype.dirIsBackwards = function(dir) {
+  if (this.direction === Direction.UP && dir === Direction.DOWN)
+      return true;
+  else if (this.direction === Direction.DOWN && dir === Direction.UP)
+      return true;
+  else if (this.direction === Direction.LEFT && dir === Direction.RIGHT)
+      return true;
+  else if (this.direction === Direction.RIGHT && dir === Direction.LEFT)
+      return true;
+  return false;
 }
 
 Snake.prototype.setDirection = function(direction) {
     if (direction !== undefined) {
+      if (!this.dirIsBackwards(direction)) {
         this.direction = direction;
+      }
     }
 };
+
+Snake.prototype.getHead = function() {
+    return this.body[0];
+}
 
 Snake.prototype.getDirection = function() {
     return this.direction;
 };
 
 Snake.prototype.move = function() {
-    this.body.pop();
+    this.previousTail = this.body.pop();
     var new_head = this.getNextPosition();
     this.body.unshift(new_head);
 };
 
 Snake.prototype.getNextPosition = function() {
-    var current_head = this.body[0];
+    var current_head = this.getHead();
     var next;
 
     if (this.direction === Direction.UP)
