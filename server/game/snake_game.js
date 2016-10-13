@@ -89,4 +89,17 @@ SnakeGame.prototype.changeDirection = function(dir) {
 SnakeGame.prototype.isValidGame = function(){}
 SnakeGame.prototype.newFrame = function(){}
 
+
+SnakeGame.prototype.up = function(){
+  this.changeDirection(Direction.UP);
+}
+SnakeGame.prototype.down = function(){
+  this.changeDirection(Direction.DOWN);
+}
+SnakeGame.prototype.left = function(){
+  this.changeDirection(Direction.LEFT);
+}
+SnakeGame.prototype.right = function(){
+  this.changeDirection(Direction.RIGHT);
+}
 module.exports = SnakeGame;

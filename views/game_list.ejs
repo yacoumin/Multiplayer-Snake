@@ -1,0 +1,13 @@
+<% include _partials/header %>
+<% include _partials/navigation %>
+  <div class="container-fluid">
+    <header>
+      <h1>Current Games</h1>
+    </header>
+    <ul class="game-list">
+      <% Object.keys(games).forEach(function(game){ %>
+        <li><a href="<%= link %><%= game %>"><%= game %></a></li>
+      <% }) %>
+  </ul>
+  </div>
+<% include _partials/footer %>

@@ -3,14 +3,15 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 
 var mongo = require('./db');
-var authentication = require('./auth');
-var SnakeGame = require('../game/snake_game.js')
+var Authentication = require('./auth');
+var GameTracker = require('../game/game_tracker.js')
 
 var app = express();
 
 mongo.connect(function(){
   var mdb = mongo.getDB();
-  var auth = new authentication.auth(mdb);
+  var auth = new Authentication.auth(mdb);
+  var gameTracker = new GameTracker();
 
   app.set('view engine', 'ejs');
   app.use(express.static('public'));
@@ -27,58 +28,61 @@ mongo.connect(function(){
   /*=============================================================================
   PAGE ROUTES
   =============================================================================*/
-  // Index / Home Page
   app.get('/', function(req, res){
-    res.render('index', {});
+    res.render('index');
   });
-  /*
-  app.get('/endpoints', function(req,res){
-    res.render('endpoints');
+  /*-----------------------------------------------------------------------------
+  GAME CREATION/JOINING
+  -----------------------------------------------------------------------------*/
+  // list of games to join
+  app.get('/games/join',auth.authTest,function(req,res){
+    res.render('game_list',{'username' : req.session.user, 'games' : gameTracker.getGames(), 'link' : '/games/'});
   });
 
-  app.get('/games/join', function(req,res){               // view open games list
-    res.render('game_list', {'games' : games, 'path' : 'join'});
+  // list of games to spectate
+  app.get('/games/spectate',auth.authTest,function(req,res){
+    res.render('game_list',{'username' : req.session.user, 'games' : gameTracker.getGames(), 'link' : '/games/spectate/'});
   });
-  app.get('/games/spectate', function(req,res){           // view open games list
-    res.render('spectator_list', {'games' : fullGames, 'path' : 'spectate'});
-  });
-  app.get('/games/spectate/:gameid', function(req,res){});   // spectate specific game
-  app.get('/games/create', function(req,res){                // view creation options
-    console.log("new game");
-    res.render('create_game');
-  });
-  app.post('/games/create', function(req,res){               // create new game
-    var gameid = req.body.gamename;
-    console.log(gameid);
-    games.push(gameid);
-    res.redirect('/games/' + gameid);
-  });
-  app.get('/games/:gameid', function(req,res){               // page for game itself
-    res.render('game_page');
-  });
-  app.get('/stats',function(req,res){});                     // view stats
-  */
 
-  // example of how to auth somebody before letting them visit page
-  // probably a better way to pass the user data around than this, too tired though to look more
-  app.get('/games',auth.authTest,function(req,res){
-    // Make the game if there are no games playing
-    if (Object.keys(activeGames).length === 0) {
-      createGame(1);
+  // page to create a game
+  app.get('/games/create',auth.authTest,function(req,res){
+    res.render('game_create',{'error' : ''});
+  });
+
+  // actually create game
+  app.post('/games/create',auth.authTest,function(req,res){
+    var gameName = req.body.gamename;
+    if(gameTracker.getGameById(gameName)){ // game exists, dont create
+      res.render('game_create',{'error' : "Game name is already in use"});
     }
-    res.render('game_page',{'username' : req.session.user});
+    else{
+      gameTracker.createGame(gameName);
+      res.redirect('/games/' + gameName);
+    }
   });
+
+  app.get('/games/:gameid',auth.authTest,function(req,res){
+    var gameid = req.params.gameid;
+    // if the game exists, render
+    if(gameTracker.getGameById(gameid)){
+      res.render('game_page',{'username' : req.session.username, 'gameid' : gameid});
+    }
+    else{
+      res.sendStatus(404);
+    }
+  })
+
   /*-----------------------------------------------------------------------------
   LOGIN/ACCOUNT ROUTES
   Creates a session whenever user posts to /login proper credentials.  Every
   other page route must first pass through the auth method, which checks the
   credentials.
   -----------------------------------------------------------------------------*/
-  app.get('/create',function(req,res){
+  app.get('/users/create',function(req,res){
     res.render('create_account',{'error': "", 'success' : ''});
   });
 
-  app.post('/create',function(req,res){
+  app.post('/users/create',function(req,res){
     var username = req.body.username;
     var password = req.body.password;
     if (!username || !password) {
@@ -90,11 +94,11 @@ mongo.connect(function(){
     }
   });
 
-  app.get('/login', function (req, res) {
+  app.get('/users/login', function (req, res) {
     res.render('login_account',{'error': "", 'success' : ""});
   });
 
-  app.post('/login', function (req, res) {
+  app.post('/users/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
     if (!username || !password) {
@@ -105,52 +109,10 @@ mongo.connect(function(){
     }
   });
 
-  app.get('/logout', function (req, res) {
+  app.get('/users/logout', function (req, res) {
     req.session.destroy();
     res.send("logout success!");
   });
-
-  app.get('/content', auth.authTest, function (req, res) {
-      res.send("You can only see this after you've logged in.");
-  });
-
-/*-----------------------------------------------------------------------------
-GAME METHODS
-Methods for creating, altering, saving, and destroying games,
------------------------------------------------------------------------------*/
-
-  var activeGames = {};
-
-  function getGameById(gameId) {
-    return activeGames[gameId];
-  }
-
-  function changeGameDirection(gameId, direction) {
-    var game = getGameById(gameId);
-    game.setDirection(Direction.UP);
-  }
-
-  function startGame(gameId) {
-    var game = getGameById(gameId);
-    game.beginGame();
-  }
-
-  function createGame(gameId) {
-    if (activeGames[gameId] != undefined) {
-      throw "game with game id \"" + gameId + "\" already exists! Can't create";
-    }
-    else {
-      console.log("creating game " + gameId);
-      activeGames[gameId] = new SnakeGame(gameId, 20, 20, 3);
-      console.log(activeGames[gameId]);
-    }
-  }
-
-  function destroyGame(gameId) {
-    if (activeGames[gameId] != undefined) {
-      delete activeGames[gameId];
-    }
-  }
 
 /*-----------------------------------------------------------------------------
 GAME API ROUTES
@@ -158,21 +120,45 @@ Handle client requests to alter the game state
 -----------------------------------------------------------------------------*/
 
   app.post('games/:gameid/up', function() {
-    changeGameDirection(gameId, Direction.UP);
-    res.send(200);
+    var game = gameTracker.getGameById(gameid);
+    if(game){
+      game.up();
+      res.sendStatus(200);
+    }
+    else{
+      res.sendStatus(404);
+    }
   })
   app.post('games/:gameid/down', function() {
-    var game = getGameById(gameId);
-    changeGameDirection(gameId, Direction.DOWN);
-    res.send(200);
+    var game = gameTracker.getGameById(gameid);
+    if(game){
+      game.down();
+      res.sendStatus(200);
+    }
+    else{
+      res.sendStatus(404);
+    }
   })
+
   app.post('games/:gameid/left', function(){
-    changeGameDirection(gameId, Direction.LEFT);
-    res.send(200);
+    var game = gameTracker.getGameById(gameid);
+    if(game){
+      game.left();
+      res.sendStatus(200);
+    }
+    else{
+      res.sendStatus(404);
+    }
   })
   app.post('games/:gameid/right', function(req, res) {
-    changeGameDirection(gameId, Direction.RIGHT);
-    res.send(200);
+    var game = gameTracker.getGameById(gameid);
+    if(game){
+      game.right();
+      res.sendStatus(200);
+    }
+    else{
+      res.sendStatus(404);
+    }
   })
 
 });
