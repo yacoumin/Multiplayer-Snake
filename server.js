@@ -112,9 +112,11 @@ ACCOUNT methods
 SOCKET ROUTES
 =============================================================================*/
         io.sockets.on('connection', function (socket) {
-          socket.on('set-name', function(data){
 
-          });
+          socket.on('message', function (message) {
+              var data = { 'message' : message.message, 'username': message.username }
+              socket.broadcast.emit('message', data);
+          })
         });
 
 /*=============================================================================
@@ -152,8 +154,9 @@ PAGE ROUTES
         app.get('/stats',function(req,res){});                     // view stats
 
         // example of how to auth somebody before letting them visit page
+        // probably a better way to pass the user data around than this, too tired though to look more
         app.get('/games',auth,function(req,res){
-          res.render('game_page');
+          res.render('game_page',{'username' : req.session.user});
         });
 /*-----------------------------------------------------------------------------
 LOGIN/ACCOUNT ROUTES

@@ -1,17 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Duelling Snakes</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/endpoints.js"></script>
-</head>
-<body>
-  <div class="container">
+<% include _partials/header %>
+<% include _partials/navigation %>
+  <div class="container-fluid">
     <header>
       <h1>Game</h1>
     </header>
-    <p>Only visible once you've logged in</p>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-9 testing" id="game-panel">game</div>
+      <div class="hidden-xs col-sm-4 col-md-3 testing" id="chat-panel">
+        <div id="chat-entries">
+        </div>
+        <div id="chat-submission" class="container-fluid">
+            <form id="chatting-form" action="#" method="get">
+              <input type="submit" id="submit-msg"></button>
+              <div>
+                <input type="hidden" name="username-hidden" id="username-hidden" value="<%= username %>">
+                <input type="text" id="msg" name="msg" placeholder="chat..."></input>
+               </div>
+             </form>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 testing" id="control-panel">
+        <button id="moveup">up</button>
+        <button id="movedown">down</button>
+        <button id="moveleft">left</button>
+        <button id="moveright">right</button>
+      </div>
+    </div>
   </div>
 </body>
 </html>

@@ -1,5 +1,9 @@
 body {
-  padding-top: 65px;
+  padding-top: 50px;
+}
+
+.testing {
+  border: 1px solid #cccccc;
 }
 
 /*=============================================================================
@@ -24,4 +28,52 @@ FORMS
 form input {
   padding: 2px;
   margin: 10px;
+}
+
+
+/*=============================================================================
+CHAT
+=============================================================================*/
+#chat-submission {
+  float: bottom;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#chat-submission  div {
+  overflow: hidden;
+}
+
+#msg {
+  width: 100%;
+  border: 1px solid #cccccc;
+  border-left: none;
+  padding: 5px;
+}
+
+#submit-msg {
+  float: right;
+  padding: 4px;
+}
+
+#chat-panel {
+  padding: 0;
+  margin: 0;
+}
+
+#chat-entries {
+  max-height: 400px;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+#chat-submission form input {
+  margin: 0px;
+}
+
+.ind-msg {
+  border-bottom: 1px solid #cccccc;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
