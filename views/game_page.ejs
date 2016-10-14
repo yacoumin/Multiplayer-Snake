@@ -5,7 +5,10 @@
       <h1><%= gameid %></h1>
     </header>
     <div class="row">
-      <div class="col-xs-12 col-sm-8 col-md-9 testing" id="game-panel">game</div>
+      <div class="col-xs-12 col-sm-8 col-md-9 testing" id="game-panel" data-game="<%= gameid %>">
+        <div>game</div>
+        <div> <canvas id="display" height="<%= displayHeight*20 %>" width="<%= displayWidth*20 %>" style="border:1px solid #c3c3c3;"></canvas></div>
+      </div>
       <div class="hidden-xs col-sm-4 col-md-3 testing" id="chat-panel">
         <div id="chat-entries">
         </div>
@@ -30,4 +33,5 @@
     </div>
   </div>
 </body>
+<script src="/js/gameSocket.js"></script>
 </html>

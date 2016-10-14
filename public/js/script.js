@@ -1,29 +1,6 @@
 
 var socket = io.connect();
 
-socket.on('message', function(data) {
-    addMessage(data.message, data.username);
-});
-
-function addMessage(msg, username) {
-  $("#chat-entries").append('<div class="ind-msg"><span><strong>' + username + '</strong> : ' + msg + '</span></div>');
-}
-
-function addMyMessage(msg, username){
-  $("#chat-entries").append('<div class="ind-msg"><span class="my-message"><strong>' + username + '</strong> : ' + msg + '</span></div>');
-
-}
-
-
-function sendMessage(e) {
-  if ($('#msg').val() != ""){
-    socket.emit('message', {'message' : $('#msg').val(), 'username' : $("#username-hidden").val()});
-    addMyMessage($('#msg').val(), "Me");
-    $('#msg').val('');
-  }
-  e.preventDefault(); // make sure to stop the post from redirecting
-}
-
 function createAccount(e){
   var validEntries = new RegExp("^([a-zA-Z0-9]{5,})$");  //no spaces, only alphanumeric, 5+ letters
   var message = "";
@@ -74,6 +51,6 @@ MAIN SCRIPT FLOW
 =============================================================================*/
 $(function(){
   $("#create").submit(function(e){createAccount(e);});
-  $("#chatting-form").submit(function(e){sendMessage(e);});
+  //$("#chatting-form").submit(function(e){sendMessage(e);});
   $("#create-game").submit(function(e){createGame(e)});
 });
