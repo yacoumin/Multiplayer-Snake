@@ -42,7 +42,7 @@ SnakeGame.prototype.tick = function(){
   else {
     this.stopGame();
   } */
-  this.io.emit('testing', {"testtt":(Math.random()*200)});
+  //this.io.emit('testing', {"testtt":(Math.random()*200)});
 }
 
 SnakeGame.prototype.updateChangedCoords = function() {
