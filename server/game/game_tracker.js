@@ -8,13 +8,13 @@ function GameTracker(){
     return activeGames[gameId];
   }
 
-  this.createGame = function(gameId) {
+  this.createGame = function(gameId,nsp) {
     if (activeGames[gameId] != undefined) {
       throw "game with game id \"" + gameId + "\" already exists! Can't create";
     }
     else {
       console.log("creating game " + gameId);
-      activeGames[gameId] = new SnakeGame(gameId, 20, 20, 3);
+      activeGames[gameId] = new SnakeGame(gameId, 30, 30, 3, nsp);
       console.log(activeGames[gameId]);
     }
   }

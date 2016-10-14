@@ -2,11 +2,11 @@ var Coord = require('./coord');
 var Direction = require('./direction');
 var Snake = require('./snake');
 
-function SnakeGame(gameId, width, height, snakeLength){
-  this.init(gameId, width, height, snakeLength);
+function SnakeGame(gameId, width, height, snakeLength, nsp){
+  this.init(gameId, width, height, snakeLength, nsp);
 }
 
-SnakeGame.prototype.init = function(gameId, width, height, snakeLength){
+SnakeGame.prototype.init = function(gameId, width, height, snakeLength, nsp){
   this.gameId = gameId;
   this.snake = new Snake(snakeLength, Direction.UP);
   this.width = width;
@@ -14,12 +14,20 @@ SnakeGame.prototype.init = function(gameId, width, height, snakeLength){
   this.appleCoords = this.generatePellet();
   this.changedCoords = [];
   this.timeout = undefined;
+  this.io = nsp;
+
+  this.io.on('connection', function (socket) {
+    socket.on('message', function (message) {
+        var data = { 'message' : message.message, 'username': message.username }
+        socket.broadcast.emit('message', data);
+    });
+  });
 }
 
 SnakeGame.prototype.tick = function(){
-  var nextPosition = this.snake.getNextPosition();
+  /*var nextPosition = this.snake.getNextPosition();
   if(this.isValidMove(nextPosition)){
-    if (nextPosition === this.appleCoords()) {
+    if (nextPosition === this.appleCoords) {
       this.appleCoords = this.generatePellet();
       this.snake.grow();
     }
@@ -27,26 +35,30 @@ SnakeGame.prototype.tick = function(){
       this.snake.move();
     }
     this.updateChangedCoords();
+    this.io.emit('testing', this.changedCoords);
   }
   else {
     this.stopGame();
-  }
+  } */
+  this.io.emit('testing', {"testtt":(Math.random()*200)});
 }
 
 SnakeGame.prototype.updateChangedCoords = function() {
-    var head = this.getHead();
+    /*var head = this.getHead();
     var previousTail = this.previousTail;
     var apple = this.appleCoords;
     changedCoords = {};
     changedCoords.push({coord: head, type: body});
     changedCoords.push({coord: previousTail, type: background});
     changedCoords.push({coord: apple, type: apple});
-
+    */
+    var changedCoords = {"snake" : this.snake.getBody(), "apple" : this.appleCoords};
     this.changedCoords = changedCoords;
 }
 
 SnakeGame.prototype.beginGame = function() {
-  this.timeout = setInterval(this.tick(), 1000);
+  //this.timeout = setInterval(this.tick(), 1000);
+  setInterval(this.tick, 1000, this.io);
 }
 
 SnakeGame.prototype.stopGame = function() {
@@ -76,7 +88,7 @@ SnakeGame.prototype.isValidMove = function(coord){
   if(coord.getY() < 0 || coord.getX() > this.height){
     valid = false;
   }
-  if(snake.inSnake(coord)){
+  if(this.snake.inSnake(coord)){
     valid = false;
   }
   return valid;
