@@ -81,3 +81,23 @@ CHAT
 .ind-msg .my-message {
   color: red;
 }
+
+/*=============================================================================
+STATS
+=============================================================================*/
+#top-games table {
+  border: 1px solid #cccccc;
+}
+
+#top-games table th {
+  background-color: #cccccc;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+#top-games table td {
+  padding: 5px;
+  border: 1px solid grey;
+}

@@ -1,15 +1,35 @@
 <% include _partials/header %>
 <% include _partials/navigation %>
+<script>
+  function convertDate(strDate){
+    var date = new Date(Date.parse(strDate));
+    console.log(date.getDay());
+    console.log(date.getYear());
+    return "" + date.getDay() + date.getMonth() + date.getYear();
+  }
+</script>
 <div class="container-fluid">
   <header>
     <h1>Stats</h1>
   </header>
   <div id="top-games">
+    <table>
+      <tr>
+        <th>User Count</th>
+        <th>Snake Length</th>
+        <th>Duration</th>
+        <th>Date Played</th>
+      </tr>
     <% if (stats != undefined) { %>
-      <% stats.forEach(function(gameStats){ %>
-        
+      <% stats.forEach(function(stat){ %>
+        <tr>
+          <td><%= stat.numUsers %></td>
+          <td><%= stat.snakeLength %></td>
+          <td><%= stat.endTime %></td>
+          <td><script>convertDate( '<%- stat.datePlayed %>' )</script></td>
+        </tr>
       <% }) %>
     <% } %>
-
+    </table>
   </div>
 </div>

@@ -96,12 +96,25 @@ mongo.connect(function(){
     if(gameTracker.getGameById(gameid)){
       var currGame = gameTracker.getGameById(gameid);
       res.render('game_page',{'username' : req.session.username, 'gameid' : gameid,
-                'displayWidth' : currGame.width, 'displayHeight' : currGame.height});
+                'displayWidth' : currGame.width, 'displayHeight' : currGame.height, spectate : false});
     }
     else{
       res.sendStatus(404);
     }
-  })
+  });
+
+  app.get('/games/spectate/:gameid',auth.authTest,function(req,res){
+    var gameid = req.params.gameid;
+    // if the game exists, render
+    if(gameTracker.getGameById(gameid)){
+      var currGame = gameTracker.getGameById(gameid);
+      res.render('game_page',{'username' : req.session.username, 'gameid' : gameid,
+                'displayWidth' : currGame.width, 'displayHeight' : currGame.height, spectate : true});
+    }
+    else{
+      res.sendStatus(404);
+    }
+  });
 
   /*-----------------------------------------------------------------------------
   LOGIN/ACCOUNT ROUTES
