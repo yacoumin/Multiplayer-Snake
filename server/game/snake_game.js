@@ -2,12 +2,13 @@ var Coord = require('./coord');
 var Direction = require('./direction');
 var Snake = require('./snake');
 
-function SnakeGame(gameId, width, height, snakeLength, nsp){
-  this.init(gameId, width, height, snakeLength, nsp);
+function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
+  this.init(gameId, width, height, snakeLength, nsp, onGameEnded, true);
 }
 
-SnakeGame.prototype.init = function(gameId, width, height, snakeLength, nsp){
+SnakeGame.prototype.init = function(gameId, width, height, snakeLength, nsp, onGameEnded, freshGame){
   this.gameId = gameId;
+  this.playerCount = 0;
   this.snake = new Snake(snakeLength, Direction.UP);
   this.width = width;
   this.height = height;
@@ -16,13 +17,34 @@ SnakeGame.prototype.init = function(gameId, width, height, snakeLength, nsp){
   this.time = 0;
   this.timeout = undefined;
   this.io = nsp;
+  this.onGameEnded = onGameEnded;
+  var thisGame = this;
 
-  this.io.on('connection', function (socket) {
-    socket.on('message', function (message) {
-        var data = { 'message' : message.message, 'username': message.username }
-        socket.broadcast.emit('message', data);
+  if (freshGame) {
+    this.startingLength = snakeLength;
+    this.io.on('connection', function (socket) {
+      thisGame.addPlayer();
+      socket.on('message', function (message) {
+          var data = { 'message' : message.message, 'username': message.username }
+          socket.broadcast.emit('message', data);
+      });
+      socket.on('disconnect', function (socket) {
+        thisGame.subtractPlayer();
+      })
     });
-  });
+    this.stopGame();
+  }
+}
+
+SnakeGame.prototype.refresh = function() {
+  this.init(
+    this.gameId,
+    this.width,
+    this.height,
+    this.startingLength,
+    this.io,
+    false
+  );
 }
 
 SnakeGame.prototype.tick = function(){
@@ -42,7 +64,7 @@ SnakeGame.prototype.tick = function(){
   else {
     this.stopGame();
   } */
-  this.io.emit('testing', {"testtt":(Math.random()*200)});
+  //this.io.emit('testing', {"testtt":(Math.random()*200)});
 }
 
 SnakeGame.prototype.updateChangedCoords = function() {
@@ -64,8 +86,15 @@ SnakeGame.prototype.beginGame = function() {
 }
 
 SnakeGame.prototype.stopGame = function() {
+  console.log("Stopping Game");
   clearInterval(this.timeout);
   this.timeout = undefined;
+  this.onGameEnded(this);
+
+  this.refresh();
+
+  // Have a countdown before game starts again?
+  this.beginGame();
 }
 
 SnakeGame.prototype.generatePellet = function() {
@@ -116,4 +145,12 @@ SnakeGame.prototype.left = function(){
 SnakeGame.prototype.right = function(){
   this.changeDirection(Direction.RIGHT);
 }
+
+SnakeGame.prototype.addPlayer = function() {
+  this.playerCount += 1;
+}
+SnakeGame.prototype.subtractPlayer = function() {
+  this.playerCount -= 1;
+}
+
 module.exports = SnakeGame;

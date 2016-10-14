@@ -1,6 +1,9 @@
 var SnakeGame = require('./snake_game.js')
 
-function GameTracker(){
+function GameTracker(mdb){
+  var GameStats = require('../util/game_stats.js');
+  var gameStats = new GameStats(mdb);
+  console.log(gameStats);
   var activeGames = {};
   var currentGame = 0;
 
@@ -14,7 +17,12 @@ function GameTracker(){
     }
     else {
       console.log("creating game " + gameId);
-      activeGames[gameId] = new SnakeGame(gameId, 30, 30, 3, nsp);
+      var onGameEnded = function(game) {
+        gameStats.insertGame(game);
+        console.log("Game Ended");
+      }
+      var newGame = new SnakeGame(gameId, 30, 30, 3, nsp, onGameEnded);
+      activeGames[gameId] = newGame;
       console.log(activeGames[gameId]);
     }
   }

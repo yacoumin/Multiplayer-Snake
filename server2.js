@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongo = require('./server/util/db');
 var Authentication = require('./server/util/auth');
 var GameTracker = require('./server/game/game_tracker.js')
+var GameStats = require('./server/util/game_stats.js')
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -26,7 +27,8 @@ io.sockets.on('connection', function (socket) {
 mongo.connect(function(){
   var mdb = mongo.getDB();
   var auth = new Authentication.auth(mdb);
-  var gameTracker = new GameTracker();
+  var gameTracker = new GameTracker(mdb);
+  var gameStats = new GameStats(mdb);
 
   app.set('view engine', 'ejs');
   app.use(express.static('public'));
@@ -46,6 +48,14 @@ mongo.connect(function(){
   app.get('/', function(req, res){
     res.render('index');
   });
+
+  app.get('/stats', function(req, res) {
+    gameStats.getTopGames(function(games){
+      console.log(games);
+      res.render('statistics', {stats: games});
+    });
+  });
+
   /*-----------------------------------------------------------------------------
   GAME CREATION/JOINING
   -----------------------------------------------------------------------------*/
