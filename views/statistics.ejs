@@ -1,12 +1,6 @@
 <% include _partials/header %>
 <% include _partials/navigation %>
 <script>
-  function convertDate(strDate){
-    var date = new Date(Date.parse(strDate));
-    console.log(date.getDay());
-    console.log(date.getYear());
-    return "" + date.getDay() + date.getMonth() + date.getYear();
-  }
 </script>
 <div class="container-fluid">
   <header>
@@ -20,13 +14,24 @@
         <th>Duration</th>
         <th>Date Played</th>
       </tr>
+      <%
+      function convertDate(strDate){
+        var date = new Date(Date.parse(strDate));
+        var strDate = strDate.replace(/\D/g," ");
+        var dtcomps = strDate.split(" ");
+        console.log(dtcomps[2]);
+
+        return "" + dtcomps[1] + "-" + dtcomps[2] + "-" + dtcomps[0];
+      }
+      %>
     <% if (stats != undefined) { %>
       <% stats.forEach(function(stat){ %>
+        <% var dateDisplay = convertDate(stat.datePlayed); %>
         <tr>
           <td><%= stat.numUsers %></td>
           <td><%= stat.snakeLength %></td>
           <td><%= stat.endTime %></td>
-          <td><script>convertDate( '<%- stat.datePlayed %>' )</script></td>
+          <td><%= dateDisplay %></td>
         </tr>
       <% }) %>
     <% } %>
