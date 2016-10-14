@@ -1,6 +1,7 @@
 <% include _partials/header %>
 <% include _partials/navigation %>
   <div class="container-fluid">
+    <% console.log(username) %>
     <header>
       <h1><%= gameid %></h1>
     </header>
@@ -33,5 +34,10 @@
     </div>
   </div>
 </body>
+<% if(spectate) { %>
+    <script>
+      $('#control-panel').hide();
+    </script>
+<% } %>
 <script src="/js/gameSocket.js"></script>
 </html>
