@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var mongo = require('./db');
 var Authentication = require('./auth');
 var GameTracker = require('../game/game_tracker.js')
+var GameStats = require('./game_stats');
 
 var app = express();
 

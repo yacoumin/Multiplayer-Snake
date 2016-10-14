@@ -13,6 +13,7 @@ SnakeGame.prototype.init = function(gameId, width, height, snakeLength){
   this.height = height;
   this.appleCoords = this.generatePellet();
   this.changedCoords = [];
+  this.time = 0;
   this.timeout = undefined;
 }
 
@@ -27,6 +28,7 @@ SnakeGame.prototype.tick = function(){
       this.snake.move();
     }
     this.updateChangedCoords();
+    time++;
   }
   else {
     this.stopGame();
