@@ -2,12 +2,29 @@
 <% include _partials/navigation %>
   <div class="container-fluid">
     <header>
-      <h1>Current Games</h1>
+      <h1 class="page-title">current games</h1>
     </header>
-    <ul class="game-list">
-      <% Object.keys(games).forEach(function(game){ %>
-        <li><a href="<%= link %><%= game %>"><%= game %></a></li>
-      <% }) %>
-  </ul>
+    <div class="row">
+      <div class="col-xs-12 col-md-8 formatted-table" id="game-list">
+        <table>
+          <tr>
+            <th>Game Name</th>
+            <th>Player Count</th>
+            <th>Duration</th>
+            <th>Snake Length</th>
+          </tr>
+        <% var count = 0; %>
+        <% Object.keys(games).forEach(function(game){ %>
+            <tr>
+              <td><a href="<%= link %><%= game %>"><%= game %></a></td>
+              <td><%= players[count] %></td>
+              <td><%= duration[count] %></td>
+              <td><%= snakeLength[count] %></td>
+            </tr>
+          <% count++; %>
+        <% }) %>
+        </table>
+      </div>
+    </div>
   </div>
 <% include _partials/footer %>

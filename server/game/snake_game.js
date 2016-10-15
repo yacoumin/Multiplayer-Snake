@@ -153,4 +153,16 @@ SnakeGame.prototype.subtractPlayer = function() {
   this.playerCount -= 1;
 }
 
+SnakeGame.prototype.getPlayerCount = function(){
+  return this.playerCount;
+}
+
+SnakeGame.prototype.getDuration = function(){
+  return this.time;
+}
+
+SnakeGame.prototype.getSnakeLength = function(){
+  return this.snake.body.length;
+}
+
 module.exports = SnakeGame;

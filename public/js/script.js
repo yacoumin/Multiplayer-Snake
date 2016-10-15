@@ -51,6 +51,5 @@ MAIN SCRIPT FLOW
 =============================================================================*/
 $(function(){
   $("#create").submit(function(e){createAccount(e);});
-  //$("#chatting-form").submit(function(e){sendMessage(e);});
   $("#create-game").submit(function(e){createGame(e)});
 });

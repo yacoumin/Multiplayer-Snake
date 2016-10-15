@@ -5,6 +5,29 @@ body {
 .testing {
   border: 1px solid #cccccc;
 }
+/*=============================================================================
+MISC
+=============================================================================*/
+.page-title {
+  border-bottom: 1px solid #777777;
+  color: #777777;
+}
+
+.news-message {
+  border: 1px solid #cccccc;
+  background-color: #eeeeee;
+  border-radius: 15px 50px;
+  padding: 20px;
+  overflow: hidden;
+  color: #777777;
+}
+
+.news-message h4 {
+  float: right;
+  text-align: right;
+  margin: 0;
+  padding: 0;
+}
 
 /*=============================================================================
 NAVIGATION
@@ -18,7 +41,11 @@ NAVIGATION
 }
 
 #nav-links li:hover {
-  background-color: #cccccc;
+  background-color: #eeeeee;
+}
+
+.dropdown-menu > li > a:hover {
+  background-color: #eeeeee;
 }
 
 
@@ -60,6 +87,9 @@ CHAT
 #chat-panel {
   padding: 0;
   margin: 0;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 #chat-entries {
@@ -73,31 +103,65 @@ CHAT
 }
 
 .ind-msg {
-  border-bottom: 1px solid #cccccc;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  border: 1px solid #cccccc;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 5px;
+  width: 80%;
+  float: left;
+  color: #777777;
 }
 
-.ind-msg .my-message {
-  color: red;
+.ind-msg.my-message {
+  float: right;
+  text-align: right;
+}
+
+#chat-panel strong {
+  text-decoration: underline;
 }
 
 /*=============================================================================
 STATS
 =============================================================================*/
-#top-games table {
+.formatted-table table {
   border: 1px solid #cccccc;
+  border-radius: 5px;
+  width: 100%;
 }
 
-#top-games table th {
+.formatted-table table th {
   background-color: #cccccc;
   font-weight: bold;
   text-align: center;
-  border: 1px solid black;
+  border: 1px solid #777777;
   padding: 5px;
 }
 
-#top-games table td {
+.formatted-table tr:nth-child(odd) {
+  background-color: #eeeeee;
+}
+
+.formatted-table tr:hover{
+  background-color: #cccccc;
+}
+
+.formatted-table table td {
   padding: 5px;
-  border: 1px solid grey;
+  border: 1px solid #777777;
+}
+
+/*=============================================================================
+GAME CONTROLS
+=============================================================================*/
+#control-panel {
+  margin: 0 auto;
+  padding: 0;
+}
+
+#control-panel button {
+  width: 25%;
+  height: 40px;
+  float: left;
 }

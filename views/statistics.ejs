@@ -4,37 +4,39 @@
 </script>
 <div class="container-fluid">
   <header>
-    <h1>Stats</h1>
+    <h1 class="page-title">stats</h1>
   </header>
-  <div id="top-games">
-    <table>
-      <tr>
-        <th>User Count</th>
-        <th>Snake Length</th>
-        <th>Duration</th>
-        <th>Date Played</th>
-      </tr>
-      <%
-      function convertDate(strDate){
-        var date = new Date(Date.parse(strDate));
-        var strDate = strDate.replace(/\D/g," ");
-        var dtcomps = strDate.split(" ");
-        console.log(dtcomps[2]);
-
-        return "" + dtcomps[1] + "-" + dtcomps[2] + "-" + dtcomps[0];
-      }
-      %>
-    <% if (stats != undefined) { %>
-      <% stats.forEach(function(stat){ %>
-        <% var dateDisplay = convertDate(stat.datePlayed); %>
+  <div class="row">
+    <div class="col-xs-12 col-md-8 formatted-table" id="top-games">
+      <table>
         <tr>
-          <td><%= stat.numUsers %></td>
-          <td><%= stat.snakeLength %></td>
-          <td><%= stat.endTime %></td>
-          <td><%= dateDisplay %></td>
+          <th>User Count</th>
+          <th>Snake Length</th>
+          <th>Duration</th>
+          <th>Date Played</th>
         </tr>
-      <% }) %>
-    <% } %>
-    </table>
+        <%
+        function convertDate(strDate){
+          var date = new Date(Date.parse(strDate));
+          var strDate = strDate.replace(/\D/g," ");
+          var dtcomps = strDate.split(" ");
+          console.log(dtcomps[2]);
+
+          return "" + dtcomps[1] + "-" + dtcomps[2] + "-" + dtcomps[0];
+        }
+        %>
+      <% if (stats != undefined) { %>
+        <% stats.forEach(function(stat){ %>
+          <% var dateDisplay = convertDate(stat.datePlayed); %>
+          <tr>
+            <td><%= stat.numUsers %></td>
+            <td><%= stat.snakeLength %></td>
+            <td><%= stat.endTime %></td>
+            <td><%= dateDisplay %></td>
+          </tr>
+        <% }) %>
+      <% } %>
+      </table>
+    </div>
   </div>
 </div>

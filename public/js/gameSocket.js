@@ -12,17 +12,18 @@ gameSocket.on('testing', function(data) {
 
 function addMessage(msg, username) {
   $("#chat-entries").append('<div class="ind-msg"><span><strong>' + username + '</strong> : ' + msg + '</span></div>');
+  $("#chat-entries")[0].scrollTop = $("#chat-entries")[0].scrollHeight; // keeps scrolled to bottom
 }
 
 function addMyMessage(msg, username){
-  $("#chat-entries").append('<div class="ind-msg"><span class="my-message"><strong>' + username + '</strong> : ' + msg + '</span></div>');
-
+  $("#chat-entries").append('<div class="ind-msg my-message"><span><strong>' + username + '</strong> : ' + msg + '</span></div>');
+  $("#chat-entries")[0].scrollTop = $("#chat-entries")[0].scrollHeight; // keeps scrolled to bottom
 }
 
 function sendMessage(e) {
   if ($('#msg').val() != ""){
     gameSocket.emit('message', {'message' : $('#msg').val(), 'username' : $("#username-hidden").val()});
-    addMyMessage($('#msg').val(), "Me");
+    addMyMessage($('#msg').val(), "me");
     $('#msg').val('');
   }
   e.preventDefault(); // make sure to stop the post from redirecting

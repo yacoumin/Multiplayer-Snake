@@ -59,14 +59,36 @@ mongo.connect(function(){
   /*-----------------------------------------------------------------------------
   GAME CREATION/JOINING
   -----------------------------------------------------------------------------*/
+  function getGameList(req,res,forwardLink){
+    var games = gameTracker.getGames();
+    var playerCount = [];
+    var duration = [];
+    var snakeLength = [];
+    Object.keys(games).forEach(function(game){
+      var currentGame = gameTracker.getGameById(game);
+      playerCount.push(currentGame.getPlayerCount());
+      duration.push(currentGame.getDuration());
+      snakeLength.push(currentGame.getSnakeLength());
+    });
+    var data = {
+      'username' : req.session.user,
+      'games' : games,
+      'players' : playerCount,
+      'duration' : duration,
+      'snakeLength' : snakeLength,
+      'link' : forwardLink,
+    }
+    res.render('game_list',data);
+  }
+
   // list of games to join
   app.get('/games/join',auth.authTest,function(req,res){
-    res.render('game_list',{'username' : req.session.user, 'games' : gameTracker.getGames(), 'link' : '/games/'});
+    getGameList(req,res,'/games/')
   });
 
   // list of games to spectate
   app.get('/games/spectate',auth.authTest,function(req,res){
-    res.render('game_list',{'username' : req.session.user, 'games' : gameTracker.getGames(), 'link' : '/games/spectate/'});
+    getGameList(req,res,'/games/spectate/');
   });
 
   // page to create a game
@@ -95,7 +117,7 @@ mongo.connect(function(){
     // if the game exists, render
     if(gameTracker.getGameById(gameid)){
       var currGame = gameTracker.getGameById(gameid);
-      res.render('game_page',{'username' : req.session.username, 'gameid' : gameid,
+      res.render('game_page',{'username' : req.session.user, 'gameid' : gameid,
                 'displayWidth' : currGame.width, 'displayHeight' : currGame.height, spectate : false});
     }
     else{
@@ -108,7 +130,7 @@ mongo.connect(function(){
     // if the game exists, render
     if(gameTracker.getGameById(gameid)){
       var currGame = gameTracker.getGameById(gameid);
-      res.render('game_page',{'username' : req.session.username, 'gameid' : gameid,
+      res.render('game_page',{'username' : req.session.user, 'gameid' : gameid,
                 'displayWidth' : currGame.width, 'displayHeight' : currGame.height, spectate : true});
     }
     else{
