@@ -7,10 +7,10 @@
       <h1 class="page-title">create an account</h1>
     </header>
     <form id="create" name="create" action="/users/create" method="post">
-      <input type="text" id="username" name="username" placeholder="Username" required></input></br>
-      <input type="password" id="password" name="password" placeholder="Password" required></input></br>
-      <input type="password" id="passwordValidate" name="passwordValidate" placeholder="Re-Type Password" required></input></br>
-      <input type="submit" placeholder="Submit"></input></br>
+      <input type="text" id="username" name="username" placeholder="username" required></input></br>
+      <input type="password" id="password" name="password" placeholder="password" required></input></br>
+      <input type="password" id="passwordValidate" name="passwordValidate" placeholder="re-type password" required></input></br>
+      <input type="submit" class="submit-button" value="submit"></input></br>
     </form>
     <div class="alert alert-warning" id="error">
       <%= error %>

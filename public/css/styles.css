@@ -5,6 +5,12 @@ body {
 .testing {
   border: 1px solid #cccccc;
 }
+
+table a, table a:hover, table a:active, table a:visited {
+  text-decoration: underline;
+  color: black
+}
+
 /*=============================================================================
 MISC
 =============================================================================*/
@@ -53,10 +59,20 @@ NAVIGATION
 FORMS
 =============================================================================*/
 form input {
-  padding: 2px;
+  padding: 4px;
   margin: 10px;
 }
 
+.submit-button {
+  background-color: white;
+  border: 1px solid #cccccc;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.submit-button:hover {
+  background-color: #eeeeee;
+}
 
 /*=============================================================================
 CHAT
@@ -81,7 +97,13 @@ CHAT
 
 #submit-msg {
   float: right;
-  padding: 4px;
+  padding: 5px;
+  background-color: white;
+  border: 1px solid #cccccc;
+}
+
+#submit-msg:hover, #submit-msg:active {
+  background-color: #eeeeee;
 }
 
 #chat-panel {
@@ -125,6 +147,11 @@ CHAT
 /*=============================================================================
 STATS
 =============================================================================*/
+.formatted-table a, .formatted-table a:hover, .formatted-table a:active, .formatted-table a:visited {
+  text-decoration: underline;
+  color: black
+}
+
 .formatted-table table {
   border: 1px solid #cccccc;
   border-radius: 5px;
@@ -164,4 +191,10 @@ GAME CONTROLS
   width: 25%;
   height: 40px;
   float: left;
+  background-color: white;
+  border: 1px solid #cccccc;
+}
+
+#control-panel button:hover, #control-panel button:active {
+  background-color: #eeeeee;
 }
