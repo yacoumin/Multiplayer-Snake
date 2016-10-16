@@ -185,13 +185,13 @@ GAME API ROUTES
 Handle client requests to alter the game state
 -----------------------------------------------------------------------------*/
 
-  function move(game,func){
+  function move(game,func, res){
     if(game && game.isRunning()){
       func();
-      //res.sendStatus(200);
+      res.sendStatus(200);
     }
     else{
-      //res.sendStatus(404);
+      res.sendStatus(404);
     }
   }
 
@@ -199,33 +199,33 @@ Handle client requests to alter the game state
         console.log("hit up");
     var gameid = req.params.gameid;
     console.log("gameid is " + gameid);
-    res.sendStatus(200);
+    //res.sendStatus(200);
     var game = gameTracker.getGameById(gameid);
-    move(game, game.up);
+    move(game, game.up, res);
   })
 
   app.post('/games/:gameid/down', function(req, res) {
     console.log("hit down");
-    res.sendStatus(200);
+    //res.sendStatus(200);
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
-    move(game, game.down);
+    move(game, game.down, res);
   })
 
   app.post('/games/:gameid/left', function(req, res){
-    res.sendStatus(200);
+    //res.sendStatus(200);
     console.log("hit left");
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
-    move(game, game.left);
+    move(game, game.left, res);
   })
 
   app.post('/games/:gameid/right', function(req, res) {
     console.log("hit right");
-    res.sendStatus(200);
+    //res.sendStatus(200);
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
-    move(game, game.right);
+    move(game, game.right, res);
   })
 
   app.post('/games/:gameid/restart', function(req, res) {
