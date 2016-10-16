@@ -4,6 +4,7 @@
   "description": "A snake server which allows creation/spectating/interaction of snake games between clients ",
   "main": "index.ejs",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
