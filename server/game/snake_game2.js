@@ -139,10 +139,10 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
 
     function isValidMove(coord){
       var valid = true;
-      if(coord.getX() < 0 || coord.getX() > thisWidth){
+      if(coord.getX() < 0 || coord.getX() > thisWidth - 1){
         valid = false;
       }
-      if(coord.getY() < 0 || coord.getY() > thisHeight){
+      if(coord.getY() < 0 || coord.getY() > thisHeight - 1){
         valid = false;
       }
       if(thisSnake.inSnake(coord)){
