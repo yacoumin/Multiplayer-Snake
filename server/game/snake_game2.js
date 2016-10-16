@@ -53,6 +53,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       var willGrow = false;
       if(isValidMove(nextPosition)) {
         if (nextPosition === thisAppleCoords) {
+          print("apple eaten");
           thisAppleCoords = generatePellet();
           thisChangedCoords.apple = thisAppleCoords;
           willGrow = true;
