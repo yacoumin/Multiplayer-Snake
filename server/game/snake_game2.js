@@ -160,35 +160,33 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       return {snake: thisSnake.getBody(), apple: thisAppleCoords, reset: isReset};
     }
 
-    function changeDirection(dir) {
-      thisSnake.setDirection(dir);
+    function onGoodMove(user, dir) {
+      console.log("onGoodMove: " + user + " " + Direction.NameFromValue(dir));
+      var moveData = {'username' : user, 'move' : Direction.NameFromValue(dir)};
+      thisIo.emit('move', moveData);
+    }
+
+    function changeDirection(user, dir) {
+      thisSnake.setDirection(user, dir, onGoodMove);
     }
 
     function isValidGame(){}
     function newFrame(){}
 
     function up(user){
-      var moveData = {'username' : user, 'move' : 'Up'};
-      thisIo.emit('move', moveData);
-      changeDirection(Direction.UP);
+      changeDirection(user, Direction.UP);
     }
 
     function down(user){
-      var moveData = {'username' : user, 'move' : 'Down'};
-      thisIo.emit('move', moveData);
-      changeDirection(Direction.DOWN);
+      changeDirection(user, Direction.DOWN);
     }
 
     function left(user){
-      var moveData = {'username' : user, 'move' : 'Left'};
-      thisIo.emit('move', moveData);
-      changeDirection(Direction.LEFT);
+      changeDirection(user, Direction.LEFT);
     }
 
     function right(user){
-      var moveData = {'username' : user, 'move' : 'Right'};
-      thisIo.emit('move', moveData);
-      changeDirection(Direction.RIGHT);
+      changeDirection(user, Direction.RIGHT);
     }
 
     function addPlayer() {

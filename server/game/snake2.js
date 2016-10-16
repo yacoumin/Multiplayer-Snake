@@ -28,22 +28,23 @@ function Snake(length, direction, width, height) {
       thisPreviousTail = thisBody[thisBody.length - 1];
     }
 
-    function dirIsBackwards(dir) {
-      if (thisDirection === Direction.UP && dir === Direction.DOWN)
-          return true;
-      else if (thisDirection === Direction.DOWN && dir === Direction.UP)
-          return true;
-      else if (thisDirection === Direction.LEFT && dir === Direction.RIGHT)
-          return true;
-      else if (thisDirection === Direction.RIGHT && dir === Direction.LEFT)
-          return true;
-      return false;
+    function isGoodMove(dir) {
+      if ((thisDirection === Direction.UP) && ((dir === Direction.DOWN) || (dir === Direction.UP)))
+          return false;
+      else if ((thisDirection === Direction.DOWN) && ((dir === Direction.UP) || (dir === Direction.DOWN)))
+          return false;
+      else if ((thisDirection === Direction.LEFT) && ((dir === Direction.RIGHT) || (dir === Direction.LEFT)))
+          return false;
+      else if ((thisDirection === Direction.RIGHT) && ((dir === Direction.LEFT) || (dir === Direction.RIGHT)))
+          return false;
+      return true;
     }
 
-    function setDirection(direction) {
+    function setDirection(user, direction, callback) {
         if (direction !== undefined) {
-          if (!dirIsBackwards(direction)) {
+          if (isGoodMove(direction)) {
             thisDirection = direction;
+            callback(user, direction);
           }
         }
     };
