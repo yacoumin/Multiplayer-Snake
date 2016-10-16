@@ -52,19 +52,19 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       var nextPosition = thisSnake.getNextPosition();
       var willGrow = false;
       if(isValidMove(nextPosition)) {
-        if (nextPosition === thisAppleCoords) {
-          print("apple eaten");
+        if (nextPosition.equals(thisAppleCoords)) {
+          //console.log("apple eaten");
           thisAppleCoords = generatePellet();
           thisChangedCoords.apple = thisAppleCoords;
           willGrow = true;
           thisSnake.grow();
-          console.log("Changed Coords: " + thisChangedCoords);
+          //console.log("Changed Coords: " + thisChangedCoords);
         }
         else {
           thisSnake.move();
         }
         updateChangedCoords(willGrow);
-        console.log(printObjectProperties("ChangedCoords", thisChangedCoords));
+        //console.log(printObjectProperties("ChangedCoords", thisChangedCoords));
 
         thisTime = thisTime + 1;
         thisIo.emit('updateDisplay', thisChangedCoords);
@@ -102,7 +102,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       }
       running = true;
       self = this;
-      thisTimeout = setInterval(tick, 500);
+      thisTimeout = setInterval(tick, 150);
       //setInterval(thisTick, 1000);
     }
 
