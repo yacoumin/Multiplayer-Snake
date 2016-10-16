@@ -3,22 +3,30 @@ var Direction = require('./direction');
 
 function Snake(length, direction, width, height) {
     var DEFAULT_LEN = 4;
-    var thisLength = (length > height/2 || length > width/2) ? DEFAULT_LEN : length;
+    var thisLength;
     var thisDirection;
-    if (direction) {
-      thisDirection = direction;
-    }
-    else {
-      thisDirection = Direction.UP;
-    }
-    var start_x = Math.floor(width/2);
-    var start_y = Math.floor(height/2);
-    var thisBody = Array();
+    var thisBody;
+    var thisPreviousTail;
 
-    for (var i=0; i < thisLength; i++) {
-        thisBody.push(new Coord(start_x, start_y + i));
+    initialize(length, direction, width, height);
+
+    function initialize(len, dir, w, h) {
+      thisLength = (len > h/2 || len > w/2) ? DEFAULT_LEN : len;
+      if (dir) {
+        thisDirection = dir;
+      }
+      else {
+        thisDirection = Direction.UP;
+      }
+      var start_x = Math.floor(w/2);
+      var start_y = Math.floor(h/2);
+      thisBody = Array();
+
+      for (var i=0; i < thisLength; i++) {
+          thisBody.push(new Coord(start_x, start_y + i));
+      }
+      thisPreviousTail = thisBody[thisBody.length - 1];
     }
-    thisPreviousTail = thisBody[thisBody.length - 1];
 
     function dirIsBackwards(dir) {
       if (thisDirection === Direction.UP && dir === Direction.DOWN)
@@ -103,6 +111,7 @@ function Snake(length, direction, width, height) {
     };
 
     return {
+        initialize: initialize,
         body: thisBody,
         previousTail: thisPreviousTail,
         getPreviousTail: getPreviousTail,

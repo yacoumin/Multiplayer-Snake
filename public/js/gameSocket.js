@@ -16,12 +16,11 @@ gameSocket.on('message', function(data) {
     console.log('message');
 });
 
-gameSocket.on('testing', function(data) {
-    console.log(data);
-});
-
 gameSocket.on('updateDisplay', function(data) {
-    console.log(data);
+    //console.log(data);
+    if (data.reset){
+      initDisplay();
+    }
     if (data.snake) {
       if (data.snake.length){
         for (var i=0; i< data.snake.length; i++)
@@ -75,13 +74,39 @@ function initDisplay() {
           drawCell(i, j, CellType.BACKGROUND);
 }
 
-$(function(){
-  $("#moveup,#movedown,#moveleft,#moveright").on('click', function(){
+function postAjax(path){
     $.ajax({
-            type: 'POST',
-            url: window.location.pathname + "/" + $(this).text(),
-            data: {}
-        });
+        type: 'POST',
+        url: path,
+        data: {}
+    });
+}
+
+$(function(){
+  $("#control-panel").find("button").on('click', function(){
+    postAjax(window.location.pathname + "/" + $(this).text());
+  });
+
+  $(document).keydown(function(e) {
+    var current_path = window.location.pathname;
+    var Key = {LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40};
+
+    switch (e.which) {
+      case Key.LEFT:
+        postAjax(current_path + "/left");
+        break;
+      case Key.UP:
+        postAjax(current_path + "/up");
+        break;
+      case Key.RIGHT:
+        postAjax(current_path + "/right");
+        break;
+      case Key.DOWN:
+        postAjax(current_path + "/down");
+        break;
+    }
+    e.preventDefault();
   })
+
   $("#chatting-form").submit(function(e){sendMessage(e);});
 });

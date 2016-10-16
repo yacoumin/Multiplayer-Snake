@@ -54,6 +54,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       if(isValidMove(nextPosition)) {
         if (nextPosition === thisAppleCoords) {
           thisAppleCoords = generatePellet();
+          thisChangedCoords.apple = thisAppleCoords;
           willGrow = true;
           thisSnake.grow();
         }
@@ -72,12 +73,11 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
 
     function updateChangedCoords(willGrow) {
         delete thisChangedCoords.snake;
-        delete thisChangedCoords.apple;
         delete thisChangedCoords.background;
 
         var head = thisSnake.getHead();
         var previousTail = thisSnake.getPreviousTail();
-        console.log("previous tail (x,y): " + previousTail.x + "," + previousTail.y);
+        //console.log("previous tail (x,y): " + previousTail.x + "," + previousTail.y);
         var apple = thisAppleCoords;
         thisChangedCoords.snake = head;
         if (!previousTail.equals(thisAppleCoords)){
@@ -92,10 +92,11 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     function beginGame() {
-      //if (freshGame){
+      if (!freshGame){
+        reset();
+      }
       running = true;
       self = this;
-      //}
       thisTimeout = setInterval(tick, 1000);
       //setInterval(thisTick, 1000);
     }
@@ -110,6 +111,12 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
 
       // Have a countdown before game starts again?
       //beginGame();
+    }
+
+    function reset() {
+      thisSnake.initialize(thisStartingLength, Direction.UP, thisWidth, thisHeight);
+      thisTime = 0;
+      thisIo.emit('updateDisplay', getInitialState(true));
     }
 
     function generatePellet() {
@@ -131,7 +138,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       if(coord.getX() < 0 || coord.getX() > thisWidth){
         valid = false;
       }
-      if(coord.getY() < 0 || coord.getX() > thisHeight){
+      if(coord.getY() < 0 || coord.getY() > thisHeight){
         valid = false;
       }
       if(thisSnake.inSnake(coord)){
@@ -140,8 +147,8 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       return valid;
     }
 
-    function getInitialState(){
-      return {snake: thisSnake.getBody(), apple: thisAppleCoords};
+    function getInitialState(isReset){
+      return {snake: thisSnake.getBody(), apple: thisAppleCoords, reset: isReset};
     }
 
     function changeDirection(dir) {

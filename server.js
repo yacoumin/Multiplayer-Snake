@@ -224,4 +224,13 @@ Handle client requests to alter the game state
     move(game, game.right);
   })
 
+  app.post('/games/:gameid/restart', function(req, res) {
+    console.log("hit restart");
+    var gameid = req.params.gameid;
+    var game = gameTracker.getGameById(gameid);
+    if (!game.isRunning()){
+      game.beginGame();
+    }
+  })
+
 });
