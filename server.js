@@ -188,34 +188,40 @@ Handle client requests to alter the game state
   function move(game,func){
     if(game && game.isRunning()){
       func();
-      res.sendStatus(200);
+      //res.sendStatus(200);
     }
     else{
-      res.sendStatus(404);
+      //res.sendStatus(404);
     }
   }
 
-  app.post('games/:gameid/up', function() {
+  app.post('/games/:gameid/up', function(req, res) {
         console.log("hit up");
+    var gameid = req.params.gameid;
+    console.log("gameid is " + gameid);
     var game = gameTracker.getGameById(gameid);
     move(game, game.up);
   })
 
-  app.post('games/:gameid/down', function() {
-        console.log("hit down");
+  app.post('/games/:gameid/down', function(req, res) {
+    console.log("hit down");
+    var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
     move(game, game.down);
   })
 
-  app.post('games/:gameid/left', function(){
+  app.post('/games/:gameid/left', function(req, res){
     console.log("hit left");
+    var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
     move(game, game.left);
   })
 
-  app.post('games/:gameid/right', function(req, res) {
-        console.log("hit right");
+  app.post('/games/:gameid/right', function(req, res) {
+    console.log("hit right");
+    var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
     move(game, game.right);
   })
+
 });

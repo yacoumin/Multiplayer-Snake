@@ -76,5 +76,12 @@ function initDisplay() {
 }
 
 $(function(){
+  $("#moveup,#movedown,#moveleft,#moveright").on('click', function(){
+    $.ajax({
+            type: 'POST',
+            url: window.location.pathname + "/" + $(this).text(),
+            data: {}
+        });
+  })
   $("#chatting-form").submit(function(e){sendMessage(e);});
 });
