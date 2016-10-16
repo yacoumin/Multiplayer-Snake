@@ -34,6 +34,10 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
               var data = { 'message' : message.message, 'username': message.username }
               socket.broadcast.emit('message', data);
           });
+          socket.on('move', function (move) {
+              var data = { 'move' : move.move, 'username': move.username}
+              socket.broadcast.emit('move', data);
+          });
           socket.on('disconnect', function (socket) {
             subtractPlayer();
           })
@@ -163,19 +167,27 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     function isValidGame(){}
     function newFrame(){}
 
-    function up(){
+    function up(user){
+      var moveData = {'username' : user, 'move' : 'Up'};
+      thisIo.emit('move', moveData);
       changeDirection(Direction.UP);
     }
 
-    function down(){
+    function down(user){
+      var moveData = {'username' : user, 'move' : 'Down'};
+      thisIo.emit('move', moveData);
       changeDirection(Direction.DOWN);
     }
 
-    function left(){
+    function left(user){
+      var moveData = {'username' : user, 'move' : 'Left'};
+      thisIo.emit('move', moveData);
       changeDirection(Direction.LEFT);
     }
 
-    function right(){
+    function right(user){
+      var moveData = {'username' : user, 'move' : 'Right'};
+      thisIo.emit('move', moveData);
       changeDirection(Direction.RIGHT);
     }
 
