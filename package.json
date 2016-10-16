@@ -27,5 +27,8 @@
     "express-session": "^1.14.1",
     "mongodb": "^2.2.10",
     "socket.io": "^1.4.8"
+  },
+  "engines": {
+    "node": "^6.6.0"
   }
 }
