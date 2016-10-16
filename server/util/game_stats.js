@@ -36,7 +36,7 @@ function GameStats(mdb) {
     var gameCollection = this.getGameCollection();
     var documents = gameCollection
                 .find()
-                .sort({ numUsers: 1, snakeLength: 1, endTime: 1 })
+                .sort({ numUsers: -1, snakeLength: -1, endTime: -1 })
                 .limit(15);
     documents.toArray(function(err, results) {
       if(err) {
