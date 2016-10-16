@@ -57,11 +57,14 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
           thisChangedCoords.apple = thisAppleCoords;
           willGrow = true;
           thisSnake.grow();
+          console.log("Changed Coords: " + thisChangedCoords);
         }
         else {
           thisSnake.move();
         }
         updateChangedCoords(willGrow);
+        console.log(printObjectProperties("ChangedCoords", thisChangedCoords));
+
         thisTime = thisTime + 1;
         thisIo.emit('updateDisplay', thisChangedCoords);
       }
@@ -78,16 +81,17 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
         var head = thisSnake.getHead();
         var previousTail = thisSnake.getPreviousTail();
         //console.log("previous tail (x,y): " + previousTail.x + "," + previousTail.y);
-        var apple = thisAppleCoords;
+        //var apple = thisAppleCoords;
         thisChangedCoords.snake = head;
-        if (!previousTail.equals(thisAppleCoords)){
-          if (willGrow) {
-            thisChangedCoords.snake = previousTail;
-          }
-          else {
-            thisChangedCoords.background = previousTail;
-          }
-        }
+        thisChangedCoords.background = previousTail;
+        // if (!previousTail.equals(thisAppleCoords)){
+        //   if (willGrow) {
+        //     thisChangedCoords.snake = previousTail;
+        //   }
+        //   else {
+        //     thisChangedCoords.background = previousTail;
+        //   }
+        // }
         //var changedCoords = {"snake" : thisSnake.getBody(), "apple" : thisAppleCoords};
     }
 
@@ -220,6 +224,32 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
         right: right,
         down: down
     };
+}
+
+function printObjectProperties(name, object, indent) {
+  if (indent == undefined) {
+    indent = 0;
+  }
+  var t = "";
+  for (var i=0; i<indent; i++) {
+    t += "  ";
+  }
+  var output = t + name + ": ";
+  var type = typeof(object);
+  if (type != "object") {
+    output += object + "\n";
+    return output;
+  }
+  else {
+    output += "{\n"
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+          output += t + printObjectProperties(key, object[key], indent + 1);
+      }
+    }
+    output += t + "}\n";
+    return output;
+  }
 }
 
 module.exports = SnakeGame;

@@ -83,10 +83,12 @@ function Snake(length, direction, width, height) {
     };
 
     function grow() {
+        thisLength++;
         thisBody.unshift(getNextPosition());
     };
 
     function shrink() {
+        thisLength--;
         thisBody.pop();
     };
 
