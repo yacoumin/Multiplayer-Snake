@@ -16,6 +16,11 @@ gameSocket.on('message', function(data) {
     console.log('message');
 });
 
+gameSocket.on('move', function(data) {
+    addMove(data.move, data.username);
+    console.log('move');
+});
+
 gameSocket.on('updateDisplay', function(data) {
     //console.log(data);
     if (data.reset){
@@ -42,6 +47,11 @@ gameSocket.on('updateDisplay', function(data) {
 function addMessage(msg, username) {
   $("#chat-entries").append('<div class="ind-msg"><span><strong>' + username + '</strong> : ' + msg + '</span></div>');
   $("#chat-entries")[0].scrollTop = $("#chat-entries")[0].scrollHeight; // keeps scrolled to bottom
+}
+
+function addMove(move, username) {
+  $("#move-history").append('<div class="ind-msg"><span><strong>' + username + '</strong> : ' + move + '</span></div>');
+  $("#move-history")[0].scrollTop = $("#move-history")[0].scrollHeight;
 }
 
 function addMyMessage(msg, username){

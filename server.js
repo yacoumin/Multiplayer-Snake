@@ -22,6 +22,10 @@ io.sockets.on('connection', function (socket) {
       socket.broadcast.emit('message', data);
       //io.to(socket.id).emit('testio',{"stillworks":"stillworks"});
   })
+  socket.on('move', function (data) {
+      var data = { 'move' : move.move, 'username': move.username}
+      socket.broadcast.emit('move', data);
+  })
 });
 
 mongo.connect(function(){
@@ -185,9 +189,9 @@ GAME API ROUTES
 Handle client requests to alter the game state
 -----------------------------------------------------------------------------*/
 
-  function move(game,func, res){
+  function move(game,func,user,res){
     if(game && game.isRunning()){
-      func();
+      func(user);
       res.sendStatus(200);
     }
     else{
@@ -201,7 +205,7 @@ Handle client requests to alter the game state
     console.log("gameid is " + gameid);
     //res.sendStatus(200);
     var game = gameTracker.getGameById(gameid);
-    move(game, game.up, res);
+    move(game, game.up, req.session.user, res);
   })
 
   app.post('/games/:gameid/down', function(req, res) {
@@ -209,7 +213,7 @@ Handle client requests to alter the game state
     //res.sendStatus(200);
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
-    move(game, game.down, res);
+    move(game, game.down, req.session.user, res);
   })
 
   app.post('/games/:gameid/left', function(req, res){
@@ -217,7 +221,7 @@ Handle client requests to alter the game state
     console.log("hit left");
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
-    move(game, game.left, res);
+    move(game, game.left, req.session.user, res);
   })
 
   app.post('/games/:gameid/right', function(req, res) {
@@ -225,7 +229,7 @@ Handle client requests to alter the game state
     //res.sendStatus(200);
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
-    move(game, game.right, res);
+    move(game, game.right, req.session.user, res);
   })
 
   app.post('/games/:gameid/restart', function(req, res) {
