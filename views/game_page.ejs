@@ -5,35 +5,32 @@
     <header>
       <h1 class="page-title"><%= gameid %></h1>
     </header>
-    <div class="row">
-      <div class="col-xs-12 col-sm-8 col-md-9" id="game-panel" data-game="<%= gameid %>">
-        <div>
-          <canvas id="display" height="<%= displayHeight*20 %>" width="<%= displayWidth*20 %>" style="border:1px solid #c3c3c3;"></canvas>
-          <div id="control-panel">
-            <button id="moveup">up</button>
-            <button id="movedown">down</button>
-            <button id="moveleft">left</button>
-            <button id="moveright">right</button>
-            <button id="restart">restart</button>
-          </div>
+    <!-- class="col-xs-12 col-sm-8 col-md-9"  -->
+      <div style="width: 900px" id="game-panel" data-game="<%= gameid %>">
+        <canvas id="display" height="<%= displayHeight*20 %>" width="<%= displayWidth*20 %>" style="border:1px solid #c3c3c3;"></canvas>
+        <div id="control-panel" style="width: <%= displayWidth*20 %>">
+          <button id="moveup">up</button>
+          <button id="movedown">down</button>
+          <button id="moveleft">left</button>
+          <button id="moveright">right</button>
+          <button id="restart">restart</button>
+        </div>
+        <div id="move-history" style="width: <%= displayWidth*20 %>">
         </div>
       </div>
       <div class="hidden-xs col-sm-4 col-md-3 testing" id="chat-panel">
         <div id="chat-entries">
         </div>
         <div id="chat-submission" class="container-fluid">
-            <form id="chatting-form" action="#" method="post" autocomplete="off">
-              <input type="submit" id="submit-msg" value="submit"></button>
-              <div>
-                <input type="hidden" name="username-hidden" id="username-hidden" value="<%= username %>">
-                <input type="text" id="msg" name="msg" placeholder="chat..."></input>
-               </div>
-             </form>
-        </div>
-        <div id="move-history">
+          <form id="chatting-form" action="#" method="post" autocomplete="off">
+            <input type="submit" id="submit-msg" value="submit"></button>
+            <div>
+              <input type="hidden" name="username-hidden" id="username-hidden" value="<%= username %>">
+              <input type="text" id="msg" name="msg" placeholder="chat..."></input>
+             </div>
+           </form>
         </div>
       </div>
-    </div>
   </div>
 </body>
 <% if(spectate) { %>

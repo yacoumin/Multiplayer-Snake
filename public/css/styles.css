@@ -188,7 +188,7 @@ GAME CONTROLS
 }
 
 #control-panel button {
-  width: 25%;
+  width: 20%;
   height: 40px;
   float: left;
   background-color: white;
@@ -197,4 +197,19 @@ GAME CONTROLS
 
 #control-panel button:hover, #control-panel button:active {
   background-color: #eeeeee;
+}
+
+/*=============================================================================
+MOVE HISTORY
+=============================================================================*/
+
+#move-history {
+  max-height: 200px;
+  overflow-y: scroll;
+  float: left;
+}
+
+.move-message {
+  float: left;
+  width: 100%;
 }

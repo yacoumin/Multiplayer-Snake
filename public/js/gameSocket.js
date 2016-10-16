@@ -50,7 +50,7 @@ function addMessage(msg, username) {
 }
 
 function addMove(move, username) {
-  $("#move-history").append('<div class="ind-msg"><span><strong>' + username + '</strong> : ' + move + '</span></div>');
+  $("#move-history").append('<div class="move-message"><span><strong>' + username + '</strong> : ' + move + '</span></div>');
   $("#move-history")[0].scrollTop = $("#move-history")[0].scrollHeight;
 }
 
