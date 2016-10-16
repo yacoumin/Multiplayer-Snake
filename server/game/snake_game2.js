@@ -101,7 +101,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       }
       running = true;
       self = this;
-      thisTimeout = setInterval(tick, 1000);
+      thisTimeout = setInterval(tick, 500);
       //setInterval(thisTick, 1000);
     }
 

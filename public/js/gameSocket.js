@@ -91,21 +91,24 @@ $(function(){
     var current_path = window.location.pathname;
     var Key = {LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40};
 
-    switch (e.which) {
-      case Key.LEFT:
-        postAjax(current_path + "/left");
-        break;
-      case Key.UP:
-        postAjax(current_path + "/up");
-        break;
-      case Key.RIGHT:
-        postAjax(current_path + "/right");
-        break;
-      case Key.DOWN:
-        postAjax(current_path + "/down");
-        break;
+    if (37 <= e.which && e.which <= 40){
+      switch (e.which) {
+        case Key.LEFT:
+          postAjax(current_path + "/left");
+          e.preventDefault
+          break;
+        case Key.UP:
+          postAjax(current_path + "/up");
+          break;
+        case Key.RIGHT:
+          postAjax(current_path + "/right");
+          break;
+        case Key.DOWN:
+          postAjax(current_path + "/down");
+          break;
+      }
+      e.preventDefault();
     }
-    e.preventDefault();
   })
 
   $("#chatting-form").submit(function(e){sendMessage(e);});

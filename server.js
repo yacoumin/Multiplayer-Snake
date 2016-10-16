@@ -199,18 +199,21 @@ Handle client requests to alter the game state
         console.log("hit up");
     var gameid = req.params.gameid;
     console.log("gameid is " + gameid);
+    res.sendStatus(200);
     var game = gameTracker.getGameById(gameid);
     move(game, game.up);
   })
 
   app.post('/games/:gameid/down', function(req, res) {
     console.log("hit down");
+    res.sendStatus(200);
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
     move(game, game.down);
   })
 
   app.post('/games/:gameid/left', function(req, res){
+    res.sendStatus(200);
     console.log("hit left");
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
@@ -219,6 +222,7 @@ Handle client requests to alter the game state
 
   app.post('/games/:gameid/right', function(req, res) {
     console.log("hit right");
+    res.sendStatus(200);
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
     move(game, game.right);
@@ -226,6 +230,7 @@ Handle client requests to alter the game state
 
   app.post('/games/:gameid/restart', function(req, res) {
     console.log("hit restart");
+    res.sendStatus(200);
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
     if (!game.isRunning()){
