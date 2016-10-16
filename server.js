@@ -51,7 +51,7 @@ mongo.connect(function(){
 
   app.get('/stats', function(req, res) {
     gameStats.getTopGames(function(games){
-      console.log(games);
+      //console.log(games);
       res.render('statistics', {stats: games});
     });
   });
@@ -186,7 +186,7 @@ Handle client requests to alter the game state
 -----------------------------------------------------------------------------*/
 
   function move(game,func){
-    if(game){
+    if(game && game.isRunning()){
       func();
       res.sendStatus(200);
     }
@@ -196,21 +196,25 @@ Handle client requests to alter the game state
   }
 
   app.post('games/:gameid/up', function() {
+        console.log("hit up");
     var game = gameTracker.getGameById(gameid);
     move(game, game.up);
   })
 
   app.post('games/:gameid/down', function() {
+        console.log("hit down");
     var game = gameTracker.getGameById(gameid);
     move(game, game.down);
   })
 
   app.post('games/:gameid/left', function(){
+    console.log("hit left");
     var game = gameTracker.getGameById(gameid);
     move(game, game.left);
   })
 
   app.post('games/:gameid/right', function(req, res) {
+        console.log("hit right");
     var game = gameTracker.getGameById(gameid);
     move(game, game.right);
   })

@@ -1,9 +1,9 @@
-var SnakeGame = require('./snake_game.js')
+var SnakeGame = require('./snake_game2.js')
 
 function GameTracker(mdb){
   var GameStats = require('../util/game_stats.js');
   var gameStats = new GameStats(mdb);
-  console.log(gameStats);
+  //console.log(gameStats);
   var activeGames = {};
   var currentGame = 0;
 
@@ -21,9 +21,12 @@ function GameTracker(mdb){
         gameStats.insertGame(game);
         console.log("Game Ended");
       }
-      var newGame = new SnakeGame(gameId, 30, 30, 3, nsp, onGameEnded);
+      var newGame = SnakeGame(gameId, 45, 25, 3, nsp, onGameEnded);
+      //console.log("----------GAME---------------------------------");
+      //console.log(newGame);
+      //console.log("----------ENDGAME--------------------------------");
       activeGames[gameId] = newGame;
-      console.log(activeGames[gameId]);
+      //console.log(activeGames[gameId]);
     }
   }
 
