@@ -125,6 +125,7 @@ function Snake(length, direction, width, height) {
         inSnake: inSnake,
         setDirection: setDirection,
         getNextPosition: getNextPosition,
+        getLength: getLength,
         grow: grow,
         move: move
     };

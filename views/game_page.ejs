@@ -5,9 +5,8 @@
     <header>
       <h1 class="page-title"><%= gameid %></h1>
     </header>
-    <!-- class="col-xs-12 col-sm-8 col-md-9"  -->
-      <div style="width: 900px" id="game-panel" data-game="<%= gameid %>">
-        <canvas id="display" height="<%= displayHeight*20 %>" width="<%= displayWidth*20 %>" style="border:1px solid #c3c3c3;"></canvas>
+      <div style="<%= displayWidth*20 %>" id="game-panel" data-game="<%= gameid %>">
+        <canvas id="display" height="<%= displayHeight*20 %>" width="<%= displayWidth*20 %>"></canvas>
         <div id="control-panel" style="width: <%= displayWidth*20 %>">
           <button id="moveup">up</button>
           <button id="movedown">down</button>
@@ -15,10 +14,10 @@
           <button id="moveright">right</button>
           <button id="restart">restart</button>
         </div>
-        <div id="move-history" style="width: <%= displayWidth*20 %>">
-        </div>
       </div>
-      <div class="hidden-xs col-sm-4 col-md-3 testing" id="chat-panel">
+      <div id="right-panel">
+        <div id="move-history">
+        </div>
         <div id="chat-entries">
         </div>
         <div id="chat-submission" class="container-fluid">

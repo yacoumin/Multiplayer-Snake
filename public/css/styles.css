@@ -106,7 +106,7 @@ CHAT
   background-color: #eeeeee;
 }
 
-#chat-panel {
+#right-panel {
   padding: 0;
   margin: 0;
   border: 1px solid #cccccc;
@@ -118,6 +118,7 @@ CHAT
   max-height: 400px;
   padding: 10px;
   overflow-y: scroll;
+  border-top: 1px solid #cccccc;
 }
 
 #chat-submission form input {
@@ -140,7 +141,7 @@ CHAT
   text-align: right;
 }
 
-#chat-panel strong {
+#chat-entries strong {
   text-decoration: underline;
 }
 
@@ -199,17 +200,34 @@ GAME CONTROLS
   background-color: #eeeeee;
 }
 
+#game-panel {
+  float: left;
+}
+
 /*=============================================================================
 MOVE HISTORY
 =============================================================================*/
 
 #move-history {
-  max-height: 200px;
+  max-height: 110px;
   overflow-y: scroll;
-  float: left;
+  width: 100%
+}
+
+
+
+#move-history span.move-message {
+  list-style: none;
+  background-color: white;
+}
+
+#move-history span.move-message:nth-child(odd){
+  background-color: #eeeeee;
 }
 
 .move-message {
   float: left;
   width: 100%;
+  padding-left: 5px;
+  border-top: 1px solid #cccccc;
 }

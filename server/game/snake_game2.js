@@ -205,7 +205,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     function getSnakeLength(){
-      return thisSnake.body.length;
+      return thisSnake.getLength();
     }
 
     function isRunning(){
