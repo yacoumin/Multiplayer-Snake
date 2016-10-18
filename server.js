@@ -7,9 +7,9 @@ npm install mongodb --save                // user db
 npm install body-parser --save            // to get values from req post data
 
 ==============================================================================*/
-var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
+var express = require('express');             // for routing
+var session = require('express-session');     // for server side session storage
+var bodyParser = require('body-parser');      // for form body parsing 
 
 // custom requires
 var mongo = require('./server/util/db');
@@ -39,9 +39,6 @@ mongo.connect(function(){
 
   /*-----------------------------------------------------------------------------
    LOGIN/ACCOUNT ROUTES
-   Creates a session whenever user posts to /login proper credentials.  Every
-   other page route must first pass through the auth method, which checks the
-   credentials.
    -----------------------------------------------------------------------------*/
    app.post('/users/create',function(req,res){
      var username = req.body.username;
@@ -82,8 +79,8 @@ mongo.connect(function(){
       var gameid = req.params.gameid;
       res.json({
         'success' : true,
-        'message' : 'in secured gameid environment',
         'username' : req.session.user,
+        'message' : 'in secured gameid environment',
         'game' : gameid
       });
     });
@@ -113,6 +110,61 @@ mongo.connect(function(){
      });
    });
    */
+   /*-----------------------------------------------------------------------------
+    MIDDLEWARE CHAINING
+    -----------------------------------------------------------------------------*/
+    /*
+    function test(req,res,next){
+      req.functionAdder = 1;
+      next();
+    }
 
-   
+    function test2(req,res,next){
+      req.functionAdder++;
+      next();
+    }
+
+    function test3(req,res,next){
+      req.functionAdder++;
+      next();
+    }
+
+    app.get('/chaining',test,test2,test3,function(req,res){
+      res.json({
+        'success' : true,
+        'message' : 'you did some chaining',
+        'functionAdder' : req.functionAdder
+      });
+    });
+    */
+/*-----------------------------------------------------------------------------
+ REGULAR EXPRESSION ROUTING
+ -----------------------------------------------------------------------------*/
+ /*
+  app.get(/.*.pdf$/, function(req, res) {
+    if(req.session.adobeInstalled){
+      res.json({
+        'success' : true,
+        'message' : 'some pdf file'
+      });
+    }
+    else{
+      res.json({
+        'success' : false,
+        'message' : 'you need to install adobe acrobat reader for this filetype',
+        'location' : '/install-adobe'
+      });
+    }
+  });
+
+  app.get('/install-adobe', function(req,res){
+    // do something
+    req.session.adobeInstalled = true;
+    res.json({
+      'success' : true,
+      'message' : 'adobe successfully installed'
+    });
+  });
+*/
+
 }); // end mongodb connect
