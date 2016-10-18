@@ -40,11 +40,13 @@ function Snake(length, direction, width, height) {
       return true;
     }
 
-    function setDirection(user, direction, callback) {
-        if (direction !== undefined) {
-          if (isGoodMove(direction)) {
-            thisDirection = direction;
-            callback(user, direction);
+    function setDirection(userMove, callback) {
+        if (userMove != undefined) {
+          if (userMove.direction !== undefined) {
+            if (isGoodMove(userMove.direction)) {
+              thisDirection = userMove.direction;
+              callback(userMove.user, userMove.direction);
+            }
           }
         }
     };

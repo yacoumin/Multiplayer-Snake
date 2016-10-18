@@ -2,6 +2,13 @@ var Coord = require('./coord');
 var Direction = require('./direction');
 var Snake = require('./snake2.js');
 
+function userMove(usr, dir) {
+  return {
+    user: usr,
+    direction: dir
+  };
+}
+
 function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     var thisGameId = gameId;
     var thisPlayerCount = 0;
@@ -15,6 +22,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     var thisIo = nsp;
     var thisOnGameEnded = onGameEnded;
     var thisStartingLength;
+    var lastMove = undefined;
     var self;
     var running = false;
     var freshGame = true;
@@ -53,6 +61,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     function tick(){
+      thisSnake.setDirection(lastMove, onGoodMove);
       var nextPosition = thisSnake.getNextPosition();
       var willGrow = false;
       if(isValidMove(nextPosition)) {
@@ -167,7 +176,8 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     function changeDirection(user, dir) {
-      thisSnake.setDirection(user, dir, onGoodMove);
+      lastMove = userMove(user,dir);
+      //thisSnake.setDirection(user, dir, onGoodMove);
     }
 
     function isValidGame(){}
