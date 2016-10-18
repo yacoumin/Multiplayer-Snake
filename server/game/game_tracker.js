@@ -10,7 +10,7 @@ function GameTracker(mdb){
   var activeGames = {};
   var currentGame = 0;
   var checkGameStatus = undefined;
-  var checkTime = 10000;
+  var checkTime = 60000;
 
   this.getGameById = function(gameId) {
     return activeGames[gameId];

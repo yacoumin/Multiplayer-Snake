@@ -181,7 +181,7 @@ mongo.connect(function(){
 
   app.get('/users/logout', function (req, res) {
     req.session.destroy();
-    res.send("logout success!");
+    res.redirect('/');
   });
 
 /*-----------------------------------------------------------------------------
@@ -200,40 +200,37 @@ Handle client requests to alter the game state
   }
 
   app.post('/games/:gameid/up', function(req, res) {
-        console.log("hit up");
+    //console.log("hit up");
     var gameid = req.params.gameid;
-    console.log("gameid is " + gameid);
+    //console.log("gameid is " + gameid);
     //res.sendStatus(200);
     var game = gameTracker.getGameById(gameid);
     move(game, game.up, req.session.user, res);
   })
 
   app.post('/games/:gameid/down', function(req, res) {
-    console.log("hit down");
-    //res.sendStatus(200);
+    //console.log("hit down");
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
     move(game, game.down, req.session.user, res);
   })
 
   app.post('/games/:gameid/left', function(req, res){
-    //res.sendStatus(200);
-    console.log("hit left");
+    //console.log("hit left");
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
     move(game, game.left, req.session.user, res);
   })
 
   app.post('/games/:gameid/right', function(req, res) {
-    console.log("hit right");
-    //res.sendStatus(200);
+    //console.log("hit right");
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);
     move(game, game.right, req.session.user, res);
   })
 
   app.post('/games/:gameid/restart', function(req, res) {
-    console.log("hit restart");
+    //console.log("hit restart");
     res.sendStatus(200);
     var gameid = req.params.gameid;
     var game = gameTracker.getGameById(gameid);

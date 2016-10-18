@@ -34,7 +34,7 @@ function createGame(e){
   $("#error").html("");
   var gameNameValid = validEntries.test($("#gamename").val());
   if(!gameNameValid){
-    message += "<li>Usernames must be at least 5 characters and alphanumeric</li>";
+    message += "<li>Game Names must be at least 5 characters and alphanumeric</li>";
   }
   if(!gameNameValid){
     e.preventDefault();

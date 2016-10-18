@@ -161,7 +161,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     function onGoodMove(user, dir) {
-      console.log("onGoodMove: " + user + " " + Direction.NameFromValue(dir));
+      //console.log("onGoodMove: " + user + " " + Direction.NameFromValue(dir));
       var moveData = {'username' : user, 'move' : Direction.NameFromValue(dir)};
       thisIo.emit('move', moveData);
     }

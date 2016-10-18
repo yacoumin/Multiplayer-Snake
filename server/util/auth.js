@@ -24,7 +24,15 @@ function Authentication(mdb){
         console.log("valid login");
         req.session.user = username;
         req.session.admin = true;
-        res.render('login_account',{'error' : '', 'success' : "Successfully logged in"});
+        var redirectLoc = req.session.originalPath;
+        if(redirectLoc){
+          res.redirect(redirectLoc);
+          delete req.session.originalPath;
+          req.session.originalPath = null;
+        }
+        else{
+          res.render('login_account',{'error' : '', 'success' : "Successfully logged in"});
+        }
       }
       else{
         res.render('login_account',{'error' : "Incorrect Password", 'success' : ''});
@@ -47,7 +55,7 @@ function Authentication(mdb){
   // checks if user is currently in session data and logged in
   this.authTest = function(req, res, next) {
     console.log(usersDB);
-
+    req.session.originalPath = req.path;
     var collection = mdb.collection(usersDB);
     if(req.session && req.session.user &&req.session.admin){
       collection.findOne({'username' : req.session.user},function(err,user){
