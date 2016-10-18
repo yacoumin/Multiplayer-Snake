@@ -156,7 +156,7 @@ mongo.connect(function(){
     var username = req.body.username;
     var password = req.body.password;
     if (!username || !password) {
-      console.log("no username or password");
+      //console.log("no username or password");
       res.render('create_account',{'error' : 'Missing information in form', 'success' : ''});
     }
     else{

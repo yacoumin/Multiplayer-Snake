@@ -24,7 +24,7 @@ function GameTracker(mdb){
       throw "game with game id \"" + gameId + "\" already exists! Can't create";
     }
     else {
-      console.log("creating game " + gameId);
+      //console.log("creating game " + gameId);
       var onGameEnded = function(game) {
         gameStats.insertGame(game);
         console.log("Game Ended");
@@ -49,19 +49,19 @@ function GameTracker(mdb){
   }
 
   function clearDoneGames(){
-    console.log("clear done games reached");
+    //console.log("clear done games reached");
     Object.keys(activeGames).forEach(function(gameid){
-      console.log("in the loop: " + gameid);
+      //console.log("in the loop: " + gameid);
       var players = activeGames[gameid].getPlayerCount();
-      console.log("num players: " + players);
+      //console.log("num players: " + players);
       if(players <= 0){
-        console.log('destroying the game');
+        //console.log('destroying the game');
         destroyGame(gameid);
       }
     });
-    console.log("length: " + Object.keys(activeGames).length);
+    //console.log("length: " + Object.keys(activeGames).length);
     if(Object.keys(activeGames).length == 0){
-      console.log("clearing interval");
+      //console.log("clearing interval");
       clearInterval(checkGameStatus);
       checkGameStatus = undefined;
     }

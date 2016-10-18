@@ -4,15 +4,15 @@ function Authentication(mdb){
   // callback for when username is tested to create new user
   this.createUser = function(username,password,req,res,usernameMatches){
     if(usernameMatches.length > 0){
-      console.log("username taken");
+      //console.log("username taken");
       res.render('create_account',{'error' : 'Username has already been taken', 'success' : ''});
     }
     else{
       var data = {'username' : username, 'password' : password}
-      console.log(usersDB);
+      //console.log(usersDB);
       var collection = mdb.collection(usersDB);
       collection.insert(data,function(err, ids){});
-      console.log("Message good, inserting");
+      //console.log("Message good, inserting");
       res.render('create_account',{'error' : '', 'success' : "Account successfully created"});
     }
   }
@@ -21,7 +21,7 @@ function Authentication(mdb){
   this.loginUser = function(username,password,req,res,usernameMatches){
     if(usernameMatches.length > 0){ // something matched username
       if(password === usernameMatches[0].password){ // passwords match
-        console.log("valid login");
+        //console.log("valid login");
         req.session.user = username;
         req.session.admin = true;
         var redirectLoc = req.session.originalPath;
@@ -45,7 +45,7 @@ function Authentication(mdb){
 
   // tests for username existence in DB
   this.testUsername = function(username,password,req,res,callback){
-    console.log(usersDB);
+    //console.log(usersDB);
     var collection = mdb.collection(usersDB);
     collection.find({'username' : username}).toArray(function(err,matchingNames){
       callback(username,password,req,res,matchingNames);
@@ -54,7 +54,7 @@ function Authentication(mdb){
 
   // checks if user is currently in session data and logged in
   this.authTest = function(req, res, next) {
-    console.log(usersDB);
+    //console.log(usersDB);
     req.session.originalPath = req.path;
     var collection = mdb.collection(usersDB);
     if(req.session && req.session.user &&req.session.admin){

@@ -36,7 +36,7 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       if (fresh) {
         thisStartingLength = snakeLength;
         thisIo.on('connection', function (socket) {
-          thisIo.to(socket.id).emit('updateDisplay', getInitialState());
+          thisIo.to(socket.id).emit('updateDisplay', getInitialState(fresh));
           addPlayer();
           socket.on('message', function (message) {
               var data = { 'message' : message.message, 'username': message.username }

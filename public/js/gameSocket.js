@@ -13,12 +13,12 @@ initDisplay();
 
 gameSocket.on('message', function(data) {
     addMessage(data.message, data.username);
-    console.log('message');
+    //console.log('message');
 });
 
 gameSocket.on('move', function(data) {
     addMove(data.move, data.username);
-    console.log('move');
+    //console.log('move');
 });
 
 gameSocket.on('updateDisplay', function(data) {

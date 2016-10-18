@@ -43,7 +43,7 @@ function createGame(e){
   }
   else{
     //e.preventDefault();
-    console.log("GOOD GAME NAME");
+    //console.log("GOOD GAME NAME");
   }
 }
 /*=============================================================================
