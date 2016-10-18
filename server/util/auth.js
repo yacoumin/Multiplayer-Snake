@@ -65,10 +65,12 @@ function Authentication(mdb){
         'message' : "no username or password"
       });
     }
-    var collection = mdb.collection(usersDB);
-    collection.find({'username' : username}).toArray(function(err,matchingNames){
-      callback(username,password,req,res,matchingNames);
-    });
+    else{
+      var collection = mdb.collection(usersDB);
+      collection.find({'username' : username}).toArray(function(err,matchingNames){
+        callback(username,password,req,res,matchingNames);
+      });
+    }
   }
 
   // checks if user is currently in session data and logged in

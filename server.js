@@ -9,7 +9,7 @@ npm install body-parser --save            // to get values from req post data
 ==============================================================================*/
 var express = require('express');             // for routing
 var session = require('express-session');     // for server side session storage
-var bodyParser = require('body-parser');      // for form body parsing 
+var bodyParser = require('body-parser');      // for form body parsing
 
 // custom requires
 var mongo = require('./server/util/db');
@@ -43,8 +43,6 @@ mongo.connect(function(){
    app.post('/users/create',function(req,res){
      var username = req.body.username;
      var password = req.body.password;
-     console.log(username);
-     console.log(password);
      auth.testUsername(username,password,req,res,auth.createUser);
    });
 
