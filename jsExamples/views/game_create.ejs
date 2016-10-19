@@ -1,0 +1,18 @@
+<% include _partials/header %>
+<% include _partials/navigation %>
+  <div class="container-fluid">
+    <header>
+      <h1 class="page-title">create a game</h1>
+    </header>
+    <form id="create-game" name="create-game" action="/games/create" method="post">
+      <input type="text" id="gamename" name="gamename" placeholder="game name" required></input></br>
+      <input type="submit" class="submit-button" value="submit"></input></br>
+    </form>
+    <div class="alert alert-warning" id="error">
+      <%= error %>
+    </div>
+  </div>
+  <% if(!error){ %>
+    <script>$("#error").hide()</script>
+  <% } %>
+<% include _partials/footer %>
