@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+
+
+
+
+
+
+  <form action="/easy" method="post">
+    <input type="text" id="username" name="username" placeholder="Name"></input>
+    <input type="text" id="position" name="position" placeholder="Position"></input>
+    <input type="submit"></input>
+  </form>
+  <p><button id="jQuerySubmit">jQuery Submit</button></p>
+
+
+
+
+  <script>
+    $("#jQuerySubmit").click(function(){
+      $.ajax({
+        url: "/easy",
+        type: "post",
+        data: {
+          'username' : $("#username").val(),
+          'password' : $("#position").val(),
+        },
+        success: function(data){
+          console.log(data.information);
+        }
+      });
+    });
+  </script>
+
+
+
+
+
+
+
+
+</body>
+</html>

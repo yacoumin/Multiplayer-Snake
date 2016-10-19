@@ -35,7 +35,34 @@ mongo.connect(function(){
       extended: true
   }));
   app.use(bodyParser.json());
+  app.set('view engine', 'ejs');
+  app.use(express.static('public'));
 
+
+   /*-----------------------------------------------------------------------------
+    BASIC ROUTING
+    -----------------------------------------------------------------------------*/
+
+    app.get('/',function(req,res){
+      res.render('index');
+    });
+
+
+    app.get('/easy',function(req,res){
+      res.json({
+        'success' : true,
+        'message' : 'easy get',
+      });
+    });
+
+    // in snake, used for movement, need body parser for form posts.
+    app.post('/easy',function(req,res){
+      res.json({
+        'success' : true,
+        'message' : 'EASY POST',
+        'information' : req.body
+      });
+    });
 
   /*-----------------------------------------------------------------------------
    LOGIN/ACCOUNT ROUTES
@@ -57,54 +84,6 @@ mongo.connect(function(){
      res.json({
        'success' : 'true',
        'message' : 'successful logout'
-     });
-   });
-
-   /*-----------------------------------------------------------------------------
-    SECURE ROUTES EXAMPLES
-    -----------------------------------------------------------------------------*/
-
-    app.get('/insecure/games/:gameid',function(req,res){
-      var gameid = req.params.gameid;
-      res.json({
-        'success' : true,
-        'message' : 'in unsecured gameid environment',
-        'game' : gameid
-      });
-    });
-
-    app.get('/secure/games/:gameid', auth.authTest, function(req,res){
-      var gameid = req.params.gameid;
-      res.json({
-        'success' : true,
-        'username' : req.session.user,
-        'message' : 'in secured gameid environment',
-        'game' : gameid
-      });
-    });
-
-  /*-----------------------------------------------------------------------------
-   SECURE CHUNKS
-   -----------------------------------------------------------------------------*/
-
-   app.use('/secure/',auth.authTest);
-
-   app.get('/insecure/games/:gameid',function(req,res){
-     var gameid = req.params.gameid;
-     res.json({
-       'success' : true,
-       'message' : 'in unsecured gameid environment',
-       'game' : gameid
-     });
-   });
-
-   app.get('/secure/games/:gameid', function(req,res){
-     var gameid = req.params.gameid;
-     res.json({
-       'success' : true,
-       'message' : 'in secured gameid environment',
-       'username' : req.session.user,
-       'game' : gameid
      });
    });
 
@@ -135,34 +114,51 @@ mongo.connect(function(){
       });
     });
 
-/*-----------------------------------------------------------------------------
- REGULAR EXPRESSION ROUTING
- -----------------------------------------------------------------------------*/
+   /*-----------------------------------------------------------------------------
+    SECURE ROUTES EXAMPLES
+    -----------------------------------------------------------------------------*/
 
-  app.get(/.*.pdf$/, function(req, res) {
-    if(req.session.adobeInstalled){
+    app.get('/unsecure/games/:gameid',function(req,res){
+      var gameid = req.params.gameid;
       res.json({
         'success' : true,
-        'message' : 'some pdf file'
+        'message' : 'in unsecured gameid environment',
+        'game' : gameid
       });
-    }
-    else{
-      res.json({
-        'success' : false,
-        'message' : 'you need to install adobe acrobat reader for this filetype',
-        'location' : '/install-adobe'
-      });
-    }
-  });
-
-  app.get('/install-adobe', function(req,res){
-    // do something
-    req.session.adobeInstalled = true;
-    res.json({
-      'success' : true,
-      'message' : 'adobe successfully installed'
     });
-  });
 
+    app.get('/secure/games/:gameid', auth.authTest, function(req,res){
+      var gameid = req.params.gameid;
+      res.json({
+        'success' : true,
+        'username' : req.session.user,
+        'message' : 'in secured gameid environment',
+        'game' : gameid
+      });
+    });
 
+  /*-----------------------------------------------------------------------------
+   SECURE CHUNKS
+   -----------------------------------------------------------------------------*/
+
+   app.use('/secure/',auth.authTest);
+
+   app.get('/unsecure/games/:gameid',function(req,res){
+     var gameid = req.params.gameid;
+     res.json({
+       'success' : true,
+       'message' : 'in unsecured gameid environment',
+       'game' : gameid
+     });
+   });
+
+   app.get('/secure/games/:gameid', function(req,res){
+     var gameid = req.params.gameid;
+     res.json({
+       'success' : true,
+       'message' : 'in secured gameid environment',
+       'username' : req.session.user,
+       'game' : gameid
+     });
+   });
 }); // end mongodb connect
