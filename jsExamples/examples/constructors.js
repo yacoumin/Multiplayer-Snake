@@ -1,17 +1,37 @@
 var print = require('./objectPrinting.js');
+var pi = 3.14;
 
-// Constructor Pattern
-function Vehicle(vehicleName) {
-  this.name = vehicleName;
-  this.noise = "Zoom";
-  this.go = function() {
-    console.log(this.noise);
-  }
+
+// Factory Function: returns an object literal
+function Circle(r) {
+  var o = {
+    radius: r,
+    area: pi*r*r,
+    getCircumfrence: function() {
+      return 2*pi*this.radius;
+    }
+  };
+  return o;
 }
 
-var v1 = new Vehicle("Vehicle 1");
-print("v1", v1);
-v1.go();
+var c = Circle(1);
+print("c", c);
+console.log("c.getCircumfrence(): " + c.getCircumfrence());
 
-v1.noise = "zip";
-v1.go();
+
+// // Constructor Function: uses "this" and "new" keywords
+// function Circle(r) {
+//   // var this = {}
+//   this.radius = r;
+//   this.area = pi*r*r;
+//   this.getCircumfrence = function() {
+//     return 2*pi*this.radius;
+//   }
+//   // return this;
+// }
+//
+// var c = new Circle(1);
+// print("c", c);
+// console.log("c.getCircumfrence(): " + c.getCircumfrence());
+
+module.exports = Circle;
