@@ -6,11 +6,7 @@ var pi = 3.14;
   Inheritance in Javascript is done with
   "Prototype Chains"
 
-  var obj = {a:1};
-  // obj's prototype chain:
-  // obj --> Object.prototype --> null
-
-  Let's make our Circle class inherit from 
+  Let's make our Circle class inherit from
   a Shape class:
 */
 
@@ -24,8 +20,6 @@ function Shape() {
   }
 }
 
-Circle.prototype = new Shape();
-
 function Circle(r) {
   this.radius = r;
   this.area = pi*r*r;
@@ -33,6 +27,10 @@ function Circle(r) {
     return 2*pi*this.radius;
   }
 }
+
+var shapeObject = new Shape();
+Circle.prototype = shapeObject;
+
 
 var c = new Circle(1);
 // Prototype Chain of c:
