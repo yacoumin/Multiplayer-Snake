@@ -1,0 +1,28 @@
+<% include _partials/header %>
+<% include _partials/navigation %>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+
+  <div class="container-fluid">
+    <header>
+      <h1 class="page-title">create an account</h1>
+    </header>
+    <form id="create" name="create" action="/users/create" method="post">
+      <input type="text" id="username" name="username" placeholder="username" required></input></br>
+      <input type="password" id="password" name="password" placeholder="password" required></input></br>
+      <input type="password" id="passwordValidate" name="passwordValidate" placeholder="re-type password" required></input></br>
+      <input type="submit" class="submit-button" value="submit"></input></br>
+    </form>
+    <div class="alert alert-warning" id="error">
+      <%= error %>
+    </div>
+    <div class="alert alert-success" id="success">
+      <%= success %>
+    </div>
+  </div>
+  <% if(!error){ %>
+    <script>$("#error").hide()</script>
+  <% } %>
+  <% if(!success){ %>
+    <script>$("#success").hide()</script>
+  <% } %>
+<% include _partials/footer %>
