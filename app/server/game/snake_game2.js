@@ -9,19 +9,19 @@ function userMove(usr, dir) {
   };
 }
 
-function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
-    var thisGameId = gameId;
-    var thisPlayerCount = 0;
-    var thisSnake = Snake(snakeLength, Direction.UP, width, height);
-    var thisWidth = (width < 20) ? 20 : width;
-    var thisHeight = (height < 20) ? 20 : height;
-    var thisAppleCoords = generatePellet();
-    var thisChangedCoords = {};
-    var thisTime = 0;
-    var thisTimeout = undefined;
-    var thisIo = nsp;
-    var thisOnGameEnded = onGameEnded;
-    var thisStartingLength;
+function SnakeGame(gid, w, h, sl, nsp, gameEnded){
+    var gameId = gid;
+    var playerCount = 0;
+    var snake = Snake(sl, Direction.UP, w, h);
+    var width = (w < 20) ? 20 : w;
+    var height = (h < 20) ? 20 : h;
+    var appleCoords = generatePellet();
+    var changedCoords = {};
+    var time = 0;
+    var timeout = undefined;
+    var io = nsp;
+    var onGameEnded = gameEnded;
+    var startingLength;
     var lastMove = undefined;
     var self;
     var running = false;
@@ -34,9 +34,9 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       //thisGame = this;
 
       if (fresh) {
-        thisStartingLength = snakeLength;
-        thisIo.on('connection', function (socket) {
-          thisIo.to(socket.id).emit('updateDisplay', getInitialState(fresh));
+        startingLength = sl;
+        io.on('connection', function (socket) {
+          io.to(socket.id).emit('updateDisplay', getInitialState(fresh));
           addPlayer();
           socket.on('message', function (message) {
               var data = { 'message' : message.message, 'username': message.username }
@@ -61,26 +61,26 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     function tick(){
-      thisSnake.setDirection(lastMove, onGoodMove);
-      var nextPosition = thisSnake.getNextPosition();
+      snake.setDirection(lastMove, onGoodMove);
+      var nextPosition = snake.getNextPosition();
       var willGrow = false;
       if(isValidMove(nextPosition)) {
-        if (nextPosition.equals(thisAppleCoords)) {
+        if (nextPosition.equals(appleCoords)) {
           //console.log("apple eaten");
-          thisAppleCoords = generatePellet();
-          thisChangedCoords.apple = thisAppleCoords;
+          appleCoords = generatePellet();
+          changedCoords.apple = appleCoords;
           willGrow = true;
-          thisSnake.grow();
+          snake.grow();
           //console.log("Changed Coords: " + thisChangedCoords);
         }
         else {
-          thisSnake.move();
+          snake.move();
         }
         updateChangedCoords(willGrow);
         //console.log(printObjectProperties("ChangedCoords", thisChangedCoords));
 
-        thisTime = thisTime + 1;
-        thisIo.emit('updateDisplay', thisChangedCoords);
+        time = time + 1;
+        io.emit('updateDisplay', changedCoords);
       }
       else {
         stopGame();
@@ -89,15 +89,15 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     function updateChangedCoords(willGrow) {
-        delete thisChangedCoords.snake;
-        delete thisChangedCoords.background;
+        delete changedCoords.snake;
+        delete changedCoords.background;
 
-        var head = thisSnake.getHead();
-        var previousTail = thisSnake.getPreviousTail();
+        var head = snake.getHead();
+        var previousTail = snake.getPreviousTail();
         //console.log("previous tail (x,y): " + previousTail.x + "," + previousTail.y);
         //var apple = thisAppleCoords;
-        thisChangedCoords.snake = head;
-        thisChangedCoords.background = previousTail;
+        changedCoords.snake = head;
+        changedCoords.background = previousTail;
         // if (!previousTail.equals(thisAppleCoords)){
         //   if (willGrow) {
         //     thisChangedCoords.snake = previousTail;
@@ -115,16 +115,16 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
       }
       running = true;
       self = this;
-      thisTimeout = setInterval(tick, 150);
+      timeout = setInterval(tick, 150);
       //setInterval(thisTick, 1000);
     }
 
     function stopGame() {
       running = false;
       console.log("Stopping Game");
-      clearInterval(thisTimeout);
-      thisTimeout = undefined;
-      thisOnGameEnded(self);
+      clearInterval(timeout);
+      timeout = undefined;
+      onGameEnded(self);
       refresh();
 
       // Have a countdown before game starts again?
@@ -132,19 +132,19 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     function reset() {
-      thisSnake.initialize(thisStartingLength, Direction.UP, thisWidth, thisHeight);
-      thisTime = 0;
-      thisIo.emit('updateDisplay', getInitialState(true));
+      snake.initialize(startingLength, Direction.UP, width, height);
+      time = 0;
+      io.emit('updateDisplay', getInitialState(true));
     }
 
     function generatePellet() {
       var goodLocation = false;
       var coord;
       while(!goodLocation){
-        var x = Math.floor(Math.random() * thisWidth);
-        var y = Math.floor(Math.random() * thisHeight);
+        var x = Math.floor(Math.random() * width);
+        var y = Math.floor(Math.random() * height);
         coord = new Coord(x,y);
-        if(!thisSnake.inSnake(coord)){
+        if(!snake.inSnake(coord)){
           goodLocation = true;
         }
       }
@@ -153,26 +153,26 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
 
     function isValidMove(coord){
       var valid = true;
-      if(coord.getX() < 0 || coord.getX() > thisWidth - 1){
+      if(coord.getX() < 0 || coord.getX() > width - 1){
         valid = false;
       }
-      if(coord.getY() < 0 || coord.getY() > thisHeight - 1){
+      if(coord.getY() < 0 || coord.getY() > height - 1){
         valid = false;
       }
-      if(thisSnake.inSnake(coord)){
+      if(snake.inSnake(coord)){
         valid = false;
       }
       return valid;
     }
 
     function getInitialState(isReset){
-      return {snake: thisSnake.getBody(), apple: thisAppleCoords, reset: isReset};
+      return {snake: snake.getBody(), apple: appleCoords, reset: isReset};
     }
 
     function onGoodMove(user, dir) {
       //console.log("onGoodMove: " + user + " " + Direction.NameFromValue(dir));
       var moveData = {'username' : user, 'move' : Direction.NameFromValue(dir)};
-      thisIo.emit('move', moveData);
+      io.emit('move', moveData);
     }
 
     function changeDirection(user, dir) {
@@ -200,22 +200,22 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     function addPlayer() {
-      thisPlayerCount += 1;
+      playerCount += 1;
     }
     function subtractPlayer() {
-      thisPlayerCount -= 1;
+      playerCount -= 1;
     }
 
     function getPlayerCount(){
-      return thisPlayerCount;
+      return playerCount;
     }
 
     function getDuration(){
-      return thisTime;
+      return time;
     }
 
     function getSnakeLength(){
-      return thisSnake.getLength();
+      return snake.getLength();
     }
 
     function isRunning(){
@@ -223,18 +223,18 @@ function SnakeGame(gameId, width, height, snakeLength, nsp, onGameEnded){
     }
 
     return {
-        gameId: thisGameId,
+        gameId: gameId,
         getPlayerCount: getPlayerCount,
-        playerCount: thisPlayerCount,
-        snake: thisSnake,
-        width: thisWidth,
-        height: thisHeight,
+        playerCount: playerCount,
+        snake: snake,
+        width: width,
+        height: height,
         //appleCoords: thisAppleCoords,
         //changedCoords: thisChangedCoords,
-        time: thisTime,
+        time: time,
         //timeout: thisTimeout,
         //io: thisIo,
-        onGameEnded: thisOnGameEnded,
+        onGameEnded: onGameEnded,
         //startingLength: thisStartingLength,
         getDuration: getDuration,
         getSnakeLength: getSnakeLength,
