@@ -1,4 +1,6 @@
-// A class for recording game statistics over the lifetime of the server
+/*-----------------------------------------------------------------------------
+A class for recording game statistics over the lifetime of the server
+-----------------------------------------------------------------------------*/
 function GameStats(mdb) {
 
   // Get the game stats mongodb colletion

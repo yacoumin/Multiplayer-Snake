@@ -1,3 +1,6 @@
+// Coordinate class used for tracking snake and apple positions
+// as well as game display bounds. 
+
 function Coord(x,y) {
     this.x = x === undefined ? 0 : x;
     this.y = y === undefined ? 0 : y;

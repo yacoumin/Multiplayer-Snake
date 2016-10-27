@@ -1,12 +1,15 @@
-var SnakeGame = require('./snake_game2.js')
-
-
-
+/*-----------------------------------------------------------------------------
+GameTracker is a class designed to essentially add some tracking information
+about active games, and will keep track of when games are in progress, when
+to get rid of games, and will create the game when a user eventually creates it.
+Specifically creates a SnakeGame, which on its own instantiates a Snake.  This
+also adds stats to the game database on game end.
+-----------------------------------------------------------------------------*/
+var SnakeGame = require('./snake_game.js')
 
 function GameTracker(mdb){
   var GameStats = require('../util/game_stats.js');
   var gameStats = new GameStats(mdb);
-  //console.log(gameStats);
   var activeGames = {};
   var currentGame = 0;
   var checkGameStatus = undefined;
@@ -30,11 +33,7 @@ function GameTracker(mdb){
         console.log("Game Ended");
       }
       var newGame = SnakeGame(gameId, 45, 25, 3, nsp, onGameEnded);
-      //console.log("----------GAME---------------------------------");
-      //console.log(newGame);
-      //console.log("----------ENDGAME--------------------------------");
       activeGames[gameId] = newGame;
-      //console.log(activeGames[gameId]);
     }
   }
 
@@ -49,19 +48,13 @@ function GameTracker(mdb){
   }
 
   function clearDoneGames(){
-    //console.log("clear done games reached");
     Object.keys(activeGames).forEach(function(gameid){
-      //console.log("in the loop: " + gameid);
       var players = activeGames[gameid].getPlayerCount();
-      //console.log("num players: " + players);
       if(players <= 0){
-        //console.log('destroying the game');
         destroyGame(gameid);
       }
     });
-    //console.log("length: " + Object.keys(activeGames).length);
     if(Object.keys(activeGames).length == 0){
-      //console.log("clearing interval");
       clearInterval(checkGameStatus);
       checkGameStatus = undefined;
     }

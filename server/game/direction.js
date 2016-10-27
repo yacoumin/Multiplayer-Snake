@@ -1,3 +1,9 @@
+/*
+ * Direction enumeration used to provide direction data to clients 
+ * (e.g. who pressed which key) as well as calculating a snakes next position
+ * when a game tick occurs.
+*/
+
 var Direction = {
   UP: 0,
   DOWN: 1,

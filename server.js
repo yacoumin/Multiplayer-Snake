@@ -8,6 +8,8 @@ var mongo = require('./server/util/db');
 var Authentication = require('./server/util/auth');
 var GameTracker = require('./server/game/game_tracker.js')
 var GameStats = require('./server/util/game_stats.js')
+var Direction = require('./server/game/direction');
+
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -179,7 +181,7 @@ mongo.connect(function(){
     }
   });
 
-  app.get('/users/logout', function (req, res) {
+  app.delete('/users/logout', function (req, res) {
     req.session.destroy();
     res.redirect('/');
   });
@@ -189,9 +191,23 @@ GAME API ROUTES
 Handle client requests to alter the game state
 -----------------------------------------------------------------------------*/
 
-  function move(game,func,user,res){
+  function move(gameid,dir,user,res){
+    var game = gameTracker.getGameById(gameid)
     if(game && game.isRunning()){
-      func(user);
+      switch(dir){
+        case Direction.UP:
+          game.up(user);
+          break;
+        case Direction.DOWN:
+          game.down(user);
+          break;
+        case Direction.LEFT:
+          game.left(user);
+          break;
+        case Direction.RIGHT:
+          game.right(user);
+          break;
+        }
       res.sendStatus(200);
     }
     else{
@@ -202,31 +218,25 @@ Handle client requests to alter the game state
   app.post('/games/:gameid/up', function(req, res) {
     //console.log("hit up");
     var gameid = req.params.gameid;
-    //console.log("gameid is " + gameid);
-    //res.sendStatus(200);
-    var game = gameTracker.getGameById(gameid);
-    move(game, game.up, req.session.user, res);
+    move(gameid, Direction.UP, req.session.user, res);
   })
 
   app.post('/games/:gameid/down', function(req, res) {
     //console.log("hit down");
     var gameid = req.params.gameid;
-    var game = gameTracker.getGameById(gameid);
-    move(game, game.down, req.session.user, res);
+    move(gameid, Direction.DOWN, req.session.user, res);
   })
 
   app.post('/games/:gameid/left', function(req, res){
     //console.log("hit left");
     var gameid = req.params.gameid;
-    var game = gameTracker.getGameById(gameid);
-    move(game, game.left, req.session.user, res);
+    move(gameid, Direction.LEFT, req.session.user, res);
   })
 
   app.post('/games/:gameid/right', function(req, res) {
     //console.log("hit right");
     var gameid = req.params.gameid;
-    var game = gameTracker.getGameById(gameid);
-    move(game, game.right, req.session.user, res);
+    move(gameid, Direction.RIGHT, req.session.user, res);
   })
 
   app.post('/games/:gameid/restart', function(req, res) {

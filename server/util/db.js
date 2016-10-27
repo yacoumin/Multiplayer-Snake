@@ -1,3 +1,8 @@
+/*-----------------------------------------------------------------------------
+Abstracts out some of the database connection logic to avoid the intense
+amount of indentation that goes along with keeping all logic inside of a
+database connected control flow.
+-----------------------------------------------------------------------------*/
 var MongoClient = require('mongodb').MongoClient;
 var mongoURI = 'mongodb://ds021326.mlab.com:21326/';
 //var mongoURI = 'mongodb://ec2-54-175-174-41.compute-1.amazonaws.com:443/' //the URI that works on the UMN network

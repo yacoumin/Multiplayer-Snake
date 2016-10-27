@@ -1,3 +1,7 @@
+/*-----------------------------------------------------------------------------
+Authentication is a class designed to handle all of the user creation and
+authentication logic.  It also sets session variables for users as they log in
+-----------------------------------------------------------------------------*/
 function Authentication(mdb){
   var usersDB = "users";
 
@@ -12,6 +16,8 @@ function Authentication(mdb){
       //console.log(usersDB);
       var collection = mdb.collection(usersDB);
       collection.insert(data,function(err, ids){});
+      req.session.user = username; // login upon account creation
+      req.session.admin = true;
       //console.log("Message good, inserting");
       res.render('create_account',{'error' : '', 'success' : "Account successfully created"});
     }

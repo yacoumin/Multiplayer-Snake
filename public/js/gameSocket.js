@@ -1,3 +1,12 @@
+/*  client-side js executed for clients in any game room
+ *
+ *  - Initializes client display from server-side dimension data passed in on page render
+ *  - Creates socket to connect to game, then creates listeners to listen/react when
+ *    server emits message or display updates.
+ *  - Holds functions for emitting messages to the server, adding messages and moves
+ *    to their respective containers in the html, and drawing to the game screen.
+ *
+*/
 var gameId = $("#game-panel").data("game");
 var display = $("#display")[0].getContext("2d");
 var SQ_SIZE = 20;

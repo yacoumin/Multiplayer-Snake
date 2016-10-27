@@ -1,5 +1,5 @@
+// Account and game creation validation/submission functions
 
-//var socket = io.connect();
 
 function createAccount(e){
   var validEntries = new RegExp("^([a-zA-Z0-9]{5,})$");  //no spaces, only alphanumeric, 5+ letters

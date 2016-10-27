@@ -1,3 +1,8 @@
+/* Provides control of the snake
+ * - Binds up/down/left/right arrows to ajax calls which hit endpoints to
+ *   change the direction of the snake for the current game.
+*/
+
 function postAjax(path){
     $.ajax({
         type: 'POST',
@@ -19,7 +24,6 @@ $(function(){
       switch (e.which) {
         case Key.LEFT:
           postAjax(current_path + "/left");
-          e.preventDefault
           break;
         case Key.UP:
           postAjax(current_path + "/up");
